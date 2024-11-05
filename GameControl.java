@@ -9,9 +9,10 @@ public class GameControl {
 		// TODO Auto-generated method stub
 		
 		JOptionPane frame = new JOptionPane();
+		int size = Integer.parseInt(frame.showInputDialog("Enter Board Size: (E.g; 2x2)"));
 		
 		
-		Board board = new Board();
+		Board board = new Board(size);
 	}
 
 }
