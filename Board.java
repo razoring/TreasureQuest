@@ -109,6 +109,8 @@ public class Board {
 				desiredPos = this.getPlrPos()+this.size;
 				if (!canMove()) break;
 				this.updateCell(desiredPos<this.cells.length?desiredPos:this.getPlrPos(), ""); // if in bounds, go to desired
+			} else {
+				continue;
 			}
 		}
 	}
