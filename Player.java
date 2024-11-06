@@ -1,16 +1,18 @@
 package TreasureQuest;
 
+import static java.lang.System.out;
+
 public class Player {
-	private static int health = 1;
-	private static int power = 100;
+	private static int lives = 1;
+	private static int lvl = 0;
 	private static int points = 0;
 	
 	private static int getLife() {
-		return health;
+		return lives;
 	}
 	
 	private static int getPower() {
-		return power;
+		return lvl;
 	}
 	
 	private static int getPoints() {
@@ -20,14 +22,20 @@ public class Player {
 	public void update(int type, int val) {
 		switch(type) {
 			case 1: 
-				health = val;
+				lives = val;
 				break;
 			case 2: 
-				power = val;
+				lvl = val;
 				break;
 			case 3:
 				points = val;
 				break;
 		}
+	}
+	
+	public Player() {
+		lives = 1;
+		lvl = 100;
+		points = 0;
 	}
 }
