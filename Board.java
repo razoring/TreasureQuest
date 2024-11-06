@@ -8,9 +8,9 @@ import javax.swing.JOptionPane;
 public class Board {
 	private final String CONTAINER = "⃣";
 	public String icon[] = {"  "+CONTAINER,"x"+CONTAINER,"*"+CONTAINER,"P"+CONTAINER,"↯"+CONTAINER}; // Blank, Player, Mine, Power-up, Power-up Alt
-	public String items[] = {"Mine","Mine","Powerup",null,null};
+	public String items[] = {"Mine","Powerup",null,null};
 	public int size;
-	public boolean paused;
+	public String annoucement;
 
 	int score = 100; //TODO: Make this dynamic
 	int lives = 1; //TODO: Make this dynamic
@@ -24,14 +24,14 @@ public class Board {
 		this.pos = 0;
 		this.cells = null;
 		this.cellsHidden = null;
-		this.paused = false;
+		this.annoucement = "";
 	}
 	
 	public Board(int x) {
 		this.cells = new String[x*x];
 		this.cellsHidden = new String[x*x];
 		this.size = (int)(sqrt(this.cells.length));
-		this.paused = false;
+		this.annoucement = "";
 		this.genCells();
 	}
 	
@@ -61,9 +61,9 @@ public class Board {
 		String board = "🅃🅁🄴🄰🅂🅄🅁🄴 🅀🅄🄴🅂🅃";
 
 		// Padding
-		board = board+"\n\n";
+		board = board+"\n"+this.annoucement+"\n";
 		
-		// Lives Display
+		// Stats Display
 		// TODO: Make this functional
 		board = board+"♥ (x"+lives+")   ✪ "+score+"\n";
 		
@@ -86,9 +86,15 @@ public class Board {
 	
 	public void updateCell(int cell, String value) {
 		if (value.isEmpty() || value.isBlank()) {
-			this.cells[this.getPlrPos()] = icon[0];
-			this.cells[cell] = icon[1];
-			this.pos = cell;
+			if (canMove()) {
+				this.cells[this.getPlrPos()] = icon[0];
+				this.cells[cell] = icon[1];
+				this.pos = cell;
+			} else {
+				this.cells[this.getPlrPos()] = icon[0];
+				this.cells[cell] = icon[2];
+				this.pos = cell;
+			}
 		} else {
 			this.cells[cell] = value;
 		}
@@ -109,8 +115,12 @@ public class Board {
 	protected Boolean canMove() {
 		if (cellsHidden[getPlrPos()]==items[0]) {
 			// Mine code
-			out.println("mine code");
-			this.paused = true;
+			this.annoucement = "𐄂 Touched a mine!";
+			return false;
+		} else  if (cellsHidden[getPlrPos()]==items[1]) {
+			// Power-up code
+			this.annoucement = icon[4]+" Recieved an exta life!";
+			return false;
 		}
 		return true;
 	}
@@ -120,19 +130,15 @@ public class Board {
 			int desiredPos = 0;
 			if (input.charAt(i) == 'w' || input.charAt(i) == 'W') {
 				desiredPos = this.getPlrPos()-this.size;
-				if (!canMove()) break;
 				this.updateCell(desiredPos>0?desiredPos:this.getPlrPos(), ""); // if in bounds, go to desired
 			} else if (input.charAt(i) == 'a' || input.charAt(i) == 'A') {
 				desiredPos = this.getPlrPos()-1;
-				if (!canMove()) break;
 				this.updateCell(desiredPos>=0 && this.getPlrPos()%this.size!=0?desiredPos:this.getPlrPos(), ""); // if in bounds and not at end, go to desired
 			} else if (input.charAt(i) == 'd' || input.charAt(i) == 'D') {
 				desiredPos = this.getPlrPos()+1;
-				if (!canMove()) break;
 				this.updateCell(desiredPos>=0 && (this.getPlrPos()+1)%this.size!=0?desiredPos:this.getPlrPos(), ""); // if in bounds and not at end, go to desired; constant 1 accounts for java arrays starting at 0
 			} else if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
 				desiredPos = this.getPlrPos()+this.size;
-				if (!canMove()) break;
 				this.updateCell(desiredPos<this.cells.length?desiredPos:this.getPlrPos(), ""); // if in bounds, go to desired
 			} else {
 				continue;

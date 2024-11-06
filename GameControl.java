@@ -15,7 +15,7 @@ public class GameControl {
 		Board board = new Board(size);
 		
 		while (true) {
-			if (board.paused == false) {
+			if (board.annoucement.isEmpty()) {
 				String input = frame.showInputDialog(board.updateBoard());
 				if (input == null || input.isEmpty() || input.isBlank()) {
 					System.exit(0);
@@ -24,7 +24,8 @@ public class GameControl {
 				}
 			} else {
 				frame.showMessageDialog(null, board.updateBoard());
-				board.paused = false;
+				board.updateCell(board.getPlrPos(), board.icon[1]);
+				board.annoucement = "";
 			}
 		}
 	}
