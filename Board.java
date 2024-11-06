@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 
 public class Board {
 	final String CONTAINER = "⃣";
-	public String icon[] = {"  "+CONTAINER,"o"+CONTAINER,"*"+CONTAINER,"P"+CONTAINER,"Ｐ"+CONTAINER}; // Blank, Player, Mine, Power-up, Power-up Alt
+	public String icon[] = {"  "+CONTAINER,"x"+CONTAINER,"*"+CONTAINER,"P"+CONTAINER,"↯"+CONTAINER}; // Blank, Player, Mine, Power-up, Power-up Alt
 	public String items[] = {"Mine","Powerup","",""};
 	public int size;
 
@@ -50,7 +50,7 @@ public class Board {
 		
 		// Lives Display
 		// TODO: Make this functional
-		board = board+"♥ (x"+lives+")   ↯ "+score+"\n";
+		board = board+"♥ (x"+lives+")   ✪ "+score+"\n";
 		
 		// Row Display
 		for (int row = 0;row<this.size;row++) {
