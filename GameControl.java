@@ -17,7 +17,7 @@ public class GameControl {
 		while (true) {
 			if (board.annoucement.isEmpty()) {
 				String input = frame.showInputDialog(board.updateBoard());
-				if (input == null || input.isEmpty() || input.isBlank()) {
+				if (input == null || input.isEmpty()) {
 					System.exit(0);
 				} else {
 					board.move(input);

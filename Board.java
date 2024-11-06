@@ -85,7 +85,7 @@ public class Board {
 	}
 	
 	public void updateCell(int cell, String value) {
-		if (value.isEmpty() || value.isBlank()) {
+		if (value.isEmpty()) {
 			if (canMove()) {
 				this.cells[this.getPlrPos()] = icon[0];
 				this.cells[cell] = icon[1];
