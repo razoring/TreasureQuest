@@ -93,22 +93,22 @@ public class Board {
 	public void move(String input) {
 		for (int i = 0;i<input.length();i++) {
 			int desiredPos = 0;
-			if (input.charAt(i) == 'w') {
+			if (input.charAt(i) == 'w' || input.charAt(i) == 'W') {
 				desiredPos = this.getPlrPos()-this.size;
 				if (!canMove()) break;
-				this.updateCell(desiredPos>0?desiredPos:this.getPlrPos(), "");
-			} else if (input.charAt(i) == 'a') {
+				this.updateCell(desiredPos>0?desiredPos:this.getPlrPos(), ""); // if in bounds, go to desired
+			} else if (input.charAt(i) == 'a' || input.charAt(i) == 'A') {
 				desiredPos = this.getPlrPos()-1;
 				if (!canMove()) break;
-				this.updateCell(desiredPos>=0 && this.getPlrPos()%this.size!=0?desiredPos:this.getPlrPos(), "");
-			} else if (input.charAt(i) == 'd') {
+				this.updateCell(desiredPos>=0 && this.getPlrPos()%this.size!=0?desiredPos:this.getPlrPos(), ""); // if in bounds and not at end, go to desired
+			} else if (input.charAt(i) == 'd' || input.charAt(i) == 'D') {
 				desiredPos = this.getPlrPos()+1;
 				if (!canMove()) break;
-				this.updateCell(desiredPos>=0 && (this.getPlrPos()+1)%this.size!=0?desiredPos:this.getPlrPos(), "");
-			} else if (input.charAt(i) == 's') {
+				this.updateCell(desiredPos>=0 && (this.getPlrPos()+1)%this.size!=0?desiredPos:this.getPlrPos(), ""); // if in bounds and not at end, go to desired; constant 1 accounts for java arrays starting at 0
+			} else if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
 				desiredPos = this.getPlrPos()+this.size;
 				if (!canMove()) break;
-				this.updateCell(desiredPos<this.cells.length?desiredPos:this.getPlrPos(), "");
+				this.updateCell(desiredPos<this.cells.length?desiredPos:this.getPlrPos(), ""); // if in bounds, go to desired
 			}
 		}
 	}

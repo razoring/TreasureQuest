@@ -9,7 +9,7 @@ public class GameControl {
 		// TODO Auto-generated method stub
 		
 		JOptionPane frame = new JOptionPane();
-		int size = Integer.parseInt(frame.showInputDialog("Enter Size of Board: (E.g; 5x5)"));
+		int size = Integer.parseInt(frame.showInputDialog("Enter Size of Board: (E.g; 5x5)"));  // TODO: Error checking; check if mis-input of string
 		
 		Player plr = new Player();
 		Board board = new Board(size);
