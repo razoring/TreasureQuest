@@ -3,7 +3,6 @@ package TreasureQuest;
 import java.util.Arrays;
 import static java.lang.System.out;
 import static java.lang.Math.sqrt;
-import javax.swing.JOptionPane;
 
 public class Board {
 	private final String CONTAINER = "⃣";
@@ -52,13 +51,13 @@ public class Board {
 				this.cellsHidden[i] = items[(int)(Math.random()*items.length)];
 			}
 		}
-		out.println(Arrays.toString(cellsHidden));
+		//out.println(Arrays.toString(cellsHidden));
 		
 		this.updateBoard();
 	}
 	
 	public String updateBoard() {
-		String board = "🅃🅁🄴🄰🅂🅄🅁🄴 🅀🅄🄴🅂🅃";
+		String board = "Treasure Quest";
 
 		// Padding
 		board = board+"\n"+this.annoucement+"\n";
