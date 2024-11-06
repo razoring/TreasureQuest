@@ -7,12 +7,12 @@ import javax.swing.JOptionPane;
 
 public class Board {
 	final String CONTAINER = "⃣";
-	public String icon[] = {"  "+CONTAINER,"o"+CONTAINER,"*"+CONTAINER,"P"+CONTAINER}; // Blank, Player, Mine, Power-up, Power-up Alt
+	public String icon[] = {"  "+CONTAINER,"o"+CONTAINER,"*"+CONTAINER,"P"+CONTAINER,"Ｐ"+CONTAINER}; // Blank, Player, Mine, Power-up, Power-up Alt
 	public String items[] = {"Mine","Powerup","",""};
 	public int size;
 
-	int score = 100;
-	int lives = 1;
+	int score = 100; //TODO: Make this dynamic
+	int lives = 1; //TODO: Make this dynamic
 	
 	protected String cells[];
 	protected int pos;
