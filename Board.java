@@ -6,26 +6,32 @@ import static java.lang.Math.sqrt;
 import javax.swing.JOptionPane;
 
 public class Board {
-	final String CONTAINER = "⃣";
+	private final String CONTAINER = "⃣";
 	public String icon[] = {"  "+CONTAINER,"x"+CONTAINER,"*"+CONTAINER,"P"+CONTAINER,"↯"+CONTAINER}; // Blank, Player, Mine, Power-up, Power-up Alt
-	public String items[] = {"Mine","Powerup","",""};
+	public String items[] = {"Mine","Mine","Powerup",null,null};
 	public int size;
+	public boolean paused;
 
 	int score = 100; //TODO: Make this dynamic
 	int lives = 1; //TODO: Make this dynamic
 	
 	protected String cells[];
+	protected String cellsHidden[];
 	protected int pos;
 	
 	public Board() {
 		this.size = 0;
 		this.pos = 0;
 		this.cells = null;
+		this.cellsHidden = null;
+		this.paused = false;
 	}
 	
 	public Board(int x) {
 		this.cells = new String[x*x];
+		this.cellsHidden = new String[x*x];
 		this.size = (int)(sqrt(this.cells.length));
+		this.paused = false;
 		this.genCells();
 	}
 	
@@ -39,6 +45,15 @@ public class Board {
 				this.cells[i] = this.icon[0];
 			}
 		}
+
+		for (int i = 0;i<this.cellsHidden.length;i++) {
+			int center = (int)(Math.ceil(this.cellsHidden.length/2));
+			if (i!=center) {
+				this.cellsHidden[i] = items[(int)(Math.random()*items.length)];
+			}
+		}
+		out.println(Arrays.toString(cellsHidden));
+		
 		this.updateBoard();
 	}
 	
@@ -79,6 +94,7 @@ public class Board {
 		}
 	}
 	
+	/*
 	protected Boolean canMove() {
 		int item = (int)(Math.random()*items.length);
 		if (items[item] == "Mine") {
@@ -86,6 +102,15 @@ public class Board {
 			return false;
 		} else if (items[item] == "Powerup") {
 			// what happens for power-up
+		}
+		return true;
+	}*/
+	
+	protected Boolean canMove() {
+		if (cellsHidden[getPlrPos()]==items[0]) {
+			// Mine code
+			out.println("mine code");
+			this.paused = true;
 		}
 		return true;
 	}

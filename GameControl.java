@@ -15,11 +15,16 @@ public class GameControl {
 		Board board = new Board(size);
 		
 		while (true) {
-			String input = frame.showInputDialog(board.updateBoard());
-			if (input == null || input.isEmpty() || input.isBlank()) {
-				System.exit(0);
+			if (board.paused == false) {
+				String input = frame.showInputDialog(board.updateBoard());
+				if (input == null || input.isEmpty() || input.isBlank()) {
+					System.exit(0);
+				} else {
+					board.move(input);
+				}
 			} else {
-				board.move(input);
+				frame.showMessageDialog(null, board.updateBoard());
+				board.paused = false;
 			}
 		}
 	}
