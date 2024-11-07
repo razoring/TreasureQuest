@@ -118,7 +118,7 @@ public class Board {
 			return false;
 		} else  if (cellsHidden[getPlrPos()]==items[1]) {
 			// Power-up code
-			this.annoucement = "Recieved an exta life!";
+			this.annoucement = "Recieved an extra life!";
 			return false;
 		}
 		return true;
