@@ -4,34 +4,37 @@ import static java.lang.System.out;
 
 public class Player {
 	private static int lives;
-	private static int power;
+	private static int stamina;
 	private static int points;
 	
 	public Player() {
 		lives = 1;
-		power = 100;
+		stamina = 25;
 		points = 0;
 	}
 	
-	private static int getLife() {
+	public int getLife() {
 		return lives;
 	}
 	
-	private static int getPower() {
-		return power;
+	public int getStamina() {
+		return stamina;
 	}
 	
-	private static int getPoints() {
+	public int getPoints() {
 		return points;
 	}
 	
 	public void update(String type, int val) {
 		switch(type) {
 			case "Life": 
-				lives = val;
+				lives += val;
 				break;
 			case "Points":
-				points = val;
+				points += val;
+				break;
+			case "Stamina":
+				stamina += val;
 				break;
 		}
 	}

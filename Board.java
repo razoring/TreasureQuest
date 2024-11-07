@@ -9,9 +9,8 @@ public class Board {
 	public String items[] = {"Mine","Powerup",null,null};
 	public int size;
 	public String annoucement;
-
-	int score = 100; //TODO: Make this dynamic
-	int lives = 1; //TODO: Make this dynamic
+	
+	Player plr = new Player();
 	
 	protected String cells[];
 	protected String cellsHidden[];
@@ -63,7 +62,7 @@ public class Board {
 		
 		// Stats Display
 		// TODO: Make this functional
-		board = board+"❤️ (x"+lives+")   🏆 "+score+"\n";
+		board = board+"❤️ (x"+plr.getLife()+")   🏆 "+plr.getPoints()+"\n";
 		
 		// Row Display
 		for (int row = 0;row<this.size;row++) {
