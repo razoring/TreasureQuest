@@ -5,8 +5,7 @@ import static java.lang.System.out;
 import static java.lang.Math.sqrt;
 
 public class Board {
-	private final String CONTAINER = "⃣";
-	public String icon[] = {"  "+CONTAINER,"x"+CONTAINER,"*"+CONTAINER,"P"+CONTAINER,"↯"+CONTAINER}; // Blank, Player, Mine, Power-up, Power-up Alt
+	public String icon[] = {" ","x","*","P"}; // Blank, Player, Mine, Power-up, Power-up Alt
 	public String items[] = {"Mine","Powerup",null,null};
 	public int size;
 	public String annoucement;
@@ -38,10 +37,10 @@ public class Board {
 		for (int i = 0;i<this.cells.length;i++) {
 			int center = (int)(Math.ceil(this.cells.length/2));
 			if (i==center) {
-				this.cells[i] = icon[1];
+				this.cells[i] = icon[1]+" |";
 				this.pos = center;
 			} else {
-				this.cells[i] = this.icon[0];
+				this.cells[i] = this.icon[0]+((i+1)%this.size!=0?" |":"");
 			}
 		}
 
@@ -64,18 +63,20 @@ public class Board {
 		
 		// Stats Display
 		// TODO: Make this functional
-		board = board+"♥ (x"+lives+")   ✪ "+score+"\n";
+		board = board+"❤️ (x"+lives+")   🏆 "+score+"\n";
 		
 		// Row Display
 		for (int row = 0;row<this.size;row++) {
 			for (int i = this.size*row;i<this.size*(row+1);i++) {
-				board = board+"   "+this.cells[i];
+				board = board+" "+this.cells[i];
+			}
+			board = board+"\n";
+			for (int i = this.size*row;i<this.size*(row+1);i++) {
+				board = board+"---"+((i+1)%this.size!=0?"+":"");
 			}
 			board = board+"\n";
 		}
 		
-		// Padding
-		board = board+"\n";
 		return board;
 	}
 	
@@ -114,11 +115,11 @@ public class Board {
 	protected Boolean canMove() {
 		if (cellsHidden[getPlrPos()]==items[0]) {
 			// Mine code
-			this.annoucement = "𐄂 Touched a mine!";
+			this.annoucement = "Touched a mine!";
 			return false;
 		} else  if (cellsHidden[getPlrPos()]==items[1]) {
 			// Power-up code
-			this.annoucement = icon[4]+" Recieved an exta life!";
+			this.annoucement = "Recieved an exta life!";
 			return false;
 		}
 		return true;
