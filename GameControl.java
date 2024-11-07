@@ -11,8 +11,7 @@ public class GameControl {
 		System.out.println("Enter Size of Board: (E.g; 5 = 5x5)");
 		int size = inp.nextInt();  // TODO: Error checking; check if mis-input of string
 		inp.nextLine();
-		
-		Player plr = new Player();
+
 		Board board = new Board(size);
 		
 		while (true) {
