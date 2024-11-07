@@ -67,7 +67,7 @@ public class Board {
 		// Row Display
 		for (int row = 0;row<this.size;row++) {
 			for (int i = this.size*row;i<this.size*(row+1);i++) {
-				board = board+" "+this.cells[i];
+				board = board+" "+this.cells[i]+" ";
 			}
 			board = board+"\n";
 			for (int i = this.size*row;i<this.size*(row+1);i++) {
