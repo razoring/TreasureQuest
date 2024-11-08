@@ -8,7 +8,7 @@ public class Board {
 	public String icon[] = {" ","x","*","P"}; // Blank, Player, Mine, Power-up, Power-up Alt
 	public String items[] = {"Mine","Powerup",null,null};
 	public int size;
-	public String annoucement;
+	public String announcement;
 	
 	Player plr = new Player();
 	
@@ -21,14 +21,14 @@ public class Board {
 		this.pos = 0;
 		this.cells = null;
 		this.cellsHidden = null;
-		this.annoucement = "";
+		this.announcement = "";
 	}
 	
 	public Board(int x) {
 		this.cells = new String[x*x];
 		this.cellsHidden = new String[x*x];
 		this.size = (int)(sqrt(this.cells.length));
-		this.annoucement = "";
+		this.announcement = "";
 		this.genCells();
 	}
 	
@@ -58,7 +58,7 @@ public class Board {
 		String board = "Treasure Quest";
 
 		// Padding
-		board = board+"\n"+this.annoucement+"\n";
+		board = board+"\n"+this.announcement+"\n";
 		
 		// Stats Display
 		// TODO: Make this functional
@@ -114,11 +114,11 @@ public class Board {
 	protected Boolean canMove() {
 		if (cellsHidden[getPlrPos()]==items[0]) {
 			// Mine code
-			this.annoucement = "Touched a mine!";
+			this.announcement = "Touched a mine!";
 			return false;
 		} else  if (cellsHidden[getPlrPos()]==items[1]) {
 			// Power-up code
-			this.annoucement = "Recieved an extra life!";
+			this.announcement = "Recieved an extra life!";
 			return false;
 		}
 		return true;
