@@ -1,147 +1,115 @@
 package TreasureQuest;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import static java.lang.System.out;
-import static java.lang.Math.sqrt;
+import java.util.Arrays;
+
+/* Raymond So, Jia Wei Chen
+ * 11.7.24
+ * Board Class:
+ * TODO: ADD DESC!!!!!!
+ */
 
 public class Board {
-	public String icon[] = {" ","x","*","P"}; // Blank, Player, Mine, Power-up, Power-up Alt
-	public String items[] = {"Mine","Powerup",null,null};
-	public int size;
-	public String annoucement;
-	
-	Player plr = new Player();
-	
-	protected String cells[];
-	protected String cellsHidden[];
-	protected int pos;
-	
-	public Board() {
-		this.size = 0;
-		this.pos = 0;
-		this.cells = null;
-		this.cellsHidden = null;
-		this.annoucement = "";
-	}
-	
-	public Board(int x) {
-		this.cells = new String[x*x];
-		this.cellsHidden = new String[x*x];
-		this.size = (int)(sqrt(this.cells.length));
-		this.annoucement = "";
-		this.genCells();
-	}
-	
-	protected void genCells() {
-		for (int i = 0;i<this.cells.length;i++) {
-			int center = (int)(Math.ceil(this.cells.length/2));
-			if (i==center) {
-				this.cells[i] = icon[1]+" |";
-				this.pos = center;
-			} else {
-				this.cells[i] = this.icon[0]+((i+1)%this.size!=0?" |":"");
-			}
-		}
+	public int size; // size of board
+	public String status; // "YOU HIT A MINE!" || "YOU GOT AN EXTRA LIFE!"
 
-		for (int i = 0;i<this.cellsHidden.length;i++) {
-			int center = (int)(Math.ceil(this.cellsHidden.length/2));
-			if (i!=center) {
-				this.cellsHidden[i] = items[(int)(Math.random()*items.length)];
-			}
-		}
-		//out.println(Arrays.toString(cellsHidden));
-		
-		this.updateBoard();
-	}
-	
-	public String updateBoard() {
-		String board = "Treasure Quest";
+	public int pos[] = new int[2]; // current position; just player
+	protected String render[][]; // to render
+	protected String locations[][]; // hidden item locations
 
-		// Padding
-		board = board+"\n"+this.annoucement+"\n";
-		
-		// Stats Display
-		// TODO: Make this functional
-		board = board+"❤️ (x"+plr.getLife()+")   🏆 "+plr.getPoints()+"\n";
-		
-		// Row Display
-		for (int row = 0;row<this.size;row++) {
-			for (int i = this.size*row;i<this.size*(row+1);i++) {
-				board = board+" "+this.cells[i];
+	// icons directory; usage: icon.get("Player") --> "x"
+	private String icons[] = { "empty", "empty", "empty", "*", "*", "*", "%" }; // probability: empty: 45%, mine:45%, powerup: 5%, treasure:5%
+	private String benefits[] = { "$", "p" }; // good items: treasure, powerup
+	public static HashMap<String, String> icon=new HashMap<String,String>(){{put("empty"," ");put("$","$");put("p","P");put("*","*");put("plr","x");put("%","TBD");}};
+
+	public Board(int s) {
+		size = s;
+		status = "";
+		pos[0] = 0;
+		pos[1] = 0;
+		locations = new String[s][s];
+		render = new String[s][s];
+	}
+
+	public void gen() {
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y < size; y++) {
+				int rand = (int) (Math.random() * icons.length);
+				if (x == 0 && y == 0) {
+					locations[0][0] = icon.get("plr");
+					render[0][0] = icon.get("plr");
+				} else {
+					if (icon.get(icons[rand]) == "TBD") {
+						locations[x][y] = icon.get(benefits[(int) (Math.random() * benefits.length)]);
+					} else {
+						locations[x][y] = icon.get(icons[rand]);
+					}
+					
+					render[x][y] = icon.get("empty");
+				}
 			}
-			board = board+"\n";
-			for (int i = this.size*row;i<this.size*(row+1);i++) {
-				board = board+"---"+((i+1)%this.size!=0?"+":"");
-			}
-			board = board+"\n";
 		}
+	}
+
+	public String display() {
+		String board = status+"\n";
 		
+		for (int row = 0;row<size+1;row++) {
+			for (int column = 0;column<size;column++) {
+				board = board+"+---";
+				if (column==size-1) {
+					board = board+"+\n";
+				}
+			}
+			if (row<size) {
+				for (int column = 0;column<size;column++) {
+					board = board+"| "+render[row][column]+" ";
+					if (column==size-1) {
+						board = board+"|\n";
+					}
+				}
+			}
+		}
 		return board;
 	}
 	
-	public int getPlrPos() {
-		return this.pos;
+	private void update(int x, int y, String value) {
+		locations[y][x] = value;
 	}
 	
-	public void updateCell(int cell, String value) {
-		if (value.isEmpty()) {
-			if (canMove()) {
-				this.cells[this.getPlrPos()] = icon[0];
-				this.cells[cell] = icon[1];
-				this.pos = cell;
-			} else {
-				this.cells[this.getPlrPos()] = icon[0];
-				this.cells[cell] = icon[2];
-				this.pos = cell;
+	private void refresh(int x, int y, String value) {
+		render[y][x] = value;
+	}
+	
+	public void processMove(String queue) {
+		for (int i = 0;i<queue.length();i++) {
+			refresh(pos[0],pos[1],icon.get("empty"));
+			if (queue.charAt(i)=='w'||queue.charAt(i)=='W') {
+				pos[1] = pos[1]>0?pos[1]-1:0;
+			} else if (queue.charAt(i)=='s'||queue.charAt(i)=='S') {
+				pos[1] = pos[1]<size-1?pos[1]+1:0;
+			} else if (queue.charAt(i)=='a'||queue.charAt(i)=='A') {
+				pos[0] = pos[0]>0?pos[0]-1:0;
+			} else if (queue.charAt(i)=='d'||queue.charAt(i)=='D') {
+				pos[0] = pos[0]<size-1?pos[0]+1:0;
 			}
-		} else {
-			this.cells[cell] = value;
-		}
-	}
-	
-	/*
-	protected Boolean canMove() {
-		int item = (int)(Math.random()*items.length);
-		if (items[item] == "Mine") {
-			// what happens for mine
-			return false;
-		} else if (items[item] == "Powerup") {
-			// what happens for power-up
-		}
-		return true;
-	}*/
-	
-	protected Boolean canMove() {
-		if (cellsHidden[getPlrPos()]==items[0]) {
-			// Mine code
-			this.annoucement = "Touched a mine!";
-			return false;
-		} else  if (cellsHidden[getPlrPos()]==items[1]) {
-			// Power-up code
-			this.annoucement = "Recieved an exta life!";
-			return false;
-		}
-		return true;
-	}
-	
-	public void move(String input) {
-		for (int i = 0;i<input.length();i++) {
-			int desiredPos = 0;
-			if (input.charAt(i) == 'w' || input.charAt(i) == 'W') {
-				desiredPos = this.getPlrPos()-this.size;
-				this.updateCell(desiredPos>0?desiredPos:this.getPlrPos(), ""); // if in bounds, go to desired
-			} else if (input.charAt(i) == 'a' || input.charAt(i) == 'A') {
-				desiredPos = this.getPlrPos()-1;
-				this.updateCell(desiredPos>=0 && this.getPlrPos()%this.size!=0?desiredPos:this.getPlrPos(), ""); // if in bounds and not at end, go to desired
-			} else if (input.charAt(i) == 'd' || input.charAt(i) == 'D') {
-				desiredPos = this.getPlrPos()+1;
-				this.updateCell(desiredPos>=0 && (this.getPlrPos()+1)%this.size!=0?desiredPos:this.getPlrPos(), ""); // if in bounds and not at end, go to desired; constant 1 accounts for java arrays starting at 0
-			} else if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
-				desiredPos = this.getPlrPos()+this.size;
-				this.updateCell(desiredPos<this.cells.length?desiredPos:this.getPlrPos(), ""); // if in bounds, go to desired
-			} else {
-				continue;
-			}
+			refresh(pos[0],pos[1],icon.get("plr"));
 		}
 	}
 }
+
+/*
+ * 
+ * YOU HIT A MINE!
+ * Lives Score Points
+ * 1     100   500
+ * +-----+-----+-----+
+ * |  *  |     |     |
+ * +-----+-----+-----+ 
+ * |  x  |  $  |     |
+ * +-----+-----+-----+
+ * |  P  |     |     |
+ * +-----+-----+-----+
+ * 
+ */
