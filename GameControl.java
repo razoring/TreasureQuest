@@ -15,7 +15,7 @@ public class GameControl {
 		Board board = new Board(size);
 		
 		while (true) {
-			if (board.annoucement.isEmpty()) {
+			if (board.announcement.isEmpty()) {
 				System.out.println("Enter movement(s):");
 				String input = inp.nextLine();
 				System.out.println(board.updateBoard());
@@ -27,7 +27,7 @@ public class GameControl {
 			} else {
 				System.out.println(board.updateBoard());
 				board.updateCell(board.getPlrPos(), board.icon[1]);
-				board.annoucement = "";
+				board.announcement = "";
 			}
 		}
 	}
