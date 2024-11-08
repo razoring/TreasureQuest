@@ -17,17 +17,16 @@ public class Board {
 	public String status; // "YOU HIT A MINE!" || "YOU GOT AN EXTRA LIFE!"
 
 	public int pos[] = new int[2]; // current position; just player
-	protected String render[][]; // to render
+	protected String queue[][]; // to render
 	protected String locations[][]; // hidden item locations
 
 	// icons directory; usage: icon.get("Player") --> "x"
-	private String icons[] = { "empty", "empty", "empty", "*", "*", "*", "%" }; // probability: empty: 45%, mine:45%, powerup: 5%, treasure:5%
-	private String benefits[] = { "$", "p" }; // good items: treasure, powerup
+	private String icons[] = { "empty", "empty", "empty", "mine", "mine", "mine", "%" }; // probability: empty: 45%, mine:45%, powerup: 5%, treasure:5%
+	private String benefits[] = { "prize", "powerup" }; // good items: treasure, powerup
 	public static HashMap<String, String> icon=new HashMap<String,String>(){{
 		put("empty"," ");
-		put("$","$");
-		put("p","P");
-		put("*","*");
+		put("prize","$");
+		put("powerup","P");
 		put("mine","*");
 		put("plr","x");
 		put("%","TBD");
@@ -39,7 +38,7 @@ public class Board {
 		pos[0] = 0;
 		pos[1] = 0;
 		locations = new String[s][s];
-		render = new String[s][s];
+		queue = new String[s][s];
 	}
 
 	public void gen() {
@@ -47,16 +46,16 @@ public class Board {
 			for (int y = 0; y < size; y++) {
 				int rand = (int) (Math.random() * icons.length);
 				if (x == 0 && y == 0) {
-					locations[0][0] = icon.get("plr");
-					render[0][0] = icon.get("plr");
+					update(0,0,icon.get("plr"));
+					render(0,0,icon.get("plr"));
 				} else {
 					if (icon.get(icons[rand]) == "TBD") {
-						locations[x][y] = icon.get(benefits[(int) (Math.random() * benefits.length)]);
+						update(x,y,icon.get(benefits[(int) (Math.random() * benefits.length)]));
 					} else {
-						locations[x][y] = icon.get(icons[rand]);
+						update(x,y,icon.get(icons[rand]));
 					}
 					
-					render[x][y] = icon.get("empty");
+					render(x,y,icon.get("empty"));
 				}
 			}
 		}
@@ -84,7 +83,7 @@ public class Board {
 			}
 			if (row<size) {
 				for (int column = 0;column<size;column++) {
-					board = board+"| "+render[row][column]+" ";
+					board = board+"| "+queue[row][column]+" ";
 					if (column==size-1) {
 						board = board+"|\n";
 					}
@@ -98,13 +97,13 @@ public class Board {
 		locations[y][x] = value;
 	}
 	
-	private void refresh(int x, int y, String value) {
-		render[y][x] = value;
+	private void render(int x, int y, String value) {
+		queue[y][x] = value;
 	}
 	
 	public void processMove(String queue) {
 		for (int i = 0;i<queue.length();i++) {
-			refresh(pos[0],pos[1],icon.get("empty"));
+			render(pos[0],pos[1],icon.get("empty"));
 			if (queue.charAt(i)=='w'||queue.charAt(i)=='W') {
 				pos[1] = pos[1]>0?pos[1]-1:0;
 			} else if (queue.charAt(i)=='s'||queue.charAt(i)=='S') {
@@ -114,12 +113,16 @@ public class Board {
 			} else if (queue.charAt(i)=='d'||queue.charAt(i)=='D') {
 				pos[0] = pos[0]<size-1?pos[0]+1:0;
 			}
-			refresh(pos[0],pos[1],icon.get("plr"));
+			render(pos[0],pos[1],icon.get("plr"));
 			
 			if (locations[pos[1]][pos[0]] != icon.get("empty")) {
+				render(pos[0],pos[1],locations[pos[1]][pos[0]]);
 				if (locations[pos[1]][pos[0]] == icon.get("*")) {
 					//TODO: function
-				}
+				} else if (locations[pos[1]][pos[0]] == icon.get("prize") || locations[pos[1]][pos[0]] == icon.get("powerup")) {
+					//TODO: function
+					update(pos[1],pos[0],icon.get("empty"));
+				} 
 			}
 		}
 	}
