@@ -1,16 +1,27 @@
 package TreasureQuest;
 
 import java.util.Scanner;
+import static java.lang.System.out;
 
 public class GameControl {
+	static Scanner reader = new Scanner(System.in);
+	
+	private static int check() {
+		String presize = reader.nextLine();
+		try {
+			return Integer.parseInt(presize);
+		} catch(NumberFormatException e) {
+			System.out.println("Please enter a valid integer");
+		}
+		return check();
+	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
-		Scanner reader = new Scanner(System.in);
 		System.out.println(""
-				+ "▄▄▄▄▄▄▄▄▄  ▄▄▄ . ▄▄▄· .▄▄ · ▄• ▄▌▄▄▄  ▄▄▄ .    .▄▄▄  ▄• ▄▌▄▄▄ ..▄▄ · ▄▄▄▄▄\n"
-				+ " •██  ▀▄ █·▀▄.▀·▐█ ▀█ ▐█ ▀. █▪██▌▀▄ █·▀▄.▀·    ▐▀•▀█ █▪██▌▀▄.▀·▐█ ▀. •██  \n"
-				+ "  ▐█.▪▐▀▀▄ ▐▀▀▪▄▄█▀▀█ ▄▀▀▀█▄█▌▐█▌▐▀▀▄ ▐▀▀▪▄    █▌·.█▌█▌▐█▌▐▀▀▪▄▄▀▀▀█▄ ▐█.▪\n"
+				+ "▄▄▄▄▄▄▄▄▄  ▄▄▄ . ▄▄▄· .▄▄ · ▄• ▄▌▄▄▄  ▄▄▄▀.   .▄▄▄  ▄• ▄▌▄▄▄ ..▄▄· ▄▄▄▄▄\n"
+				+ " •██  ▀▄ █·▀▄.▀·▐█ ▀█ ▐█ ▀. █▪██▌▀▄ █·▀▄.·    ▐▀•▀█ █▪██▌▀▄.▀·▐█ ▀. •██  \n"
+				+ "  ▐█.▪▐▀▀▄ ▐▀▀▪▄▄█▀▀█ ▄▀▀▀█▄█▌▐█▌▐▀▀▄ ▐▀▀▪    █▌·.█▌█▌▐█▌▐▀▀▪▄▄▀▀▀█▄ ▐█.▪\n"
 				+ "  ▐█▌·▐█•█▌▐█▄▄▌▐█ ▪▐▌▐█▄▪▐█▐█▄█▌▐█•█▌▐█▄▄▌    ▐█▪▄█·▐█▄█▌▐█▄▄▌▐█▄▪▐█ ▐█▌·\n"
 				+ "  ▀▀▀ .▀  ▀ ▀▀▀  ▀  ▀  ▀▀▀▀  ▀▀▀ .▀  ▀ ▀▀▀     ·▀▀█.  ▀▀▀  ▀▀▀  ▀▀▀▀  ▀▀▀ ");
 		System.out.println("// INSTRUCTIONS:\n"
@@ -20,13 +31,13 @@ public class GameControl {
 				+ "- Death upon score zero \n");
 		System.out.println("// TO BEGIN:\n"
 				+ "Enter an integer to represent the map size (E.g: 5 = 5x5)");
-		int size = reader.nextInt();  // TODO: Error checking; check if mis-input of string
-		Board board = new Board(size);
+		
+		Board board = new Board(check());
 		board.gen();
 		while (true) {
+			System.out.println(board.display());
 			String input = reader.nextLine();
 			board.processMove(input);
-			System.out.println(board.display());
 		}
 	}
 }

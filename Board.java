@@ -22,7 +22,6 @@ public class Board {
 
 	// icons directory; usage: icon.get("Player") --> "x"
 	private String icons[] = { "empty", "empty", "empty", "mine", "mine", "mine", "%" }; // probability: empty: 45%, mine:45%, powerup: 5%, treasure:5%
-	private String benefits[] = { "prize", "powerup" }; // good items: treasure, powerup
 	public static HashMap<String, String> icon=new HashMap<String,String>(){{
 		put("empty"," ");
 		put("prize","$");
@@ -31,6 +30,7 @@ public class Board {
 		put("plr","x");
 		put("%","TBD");
 	}};
+	private String benefits[] = {"prize", "power" }; // good items: treasure, powerup
 
 	public Board(int s) {
 		size = s;
@@ -54,7 +54,6 @@ public class Board {
 					} else {
 						update(x,y,icon.get(icons[rand]));
 					}
-					
 					render(x,y,icon.get("empty"));
 				}
 			}
