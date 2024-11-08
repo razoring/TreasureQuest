@@ -17,9 +17,9 @@ public class Board {
 	public String status; // "YOU HIT A MINE!" || "YOU GOT AN EXTRA LIFE!"
 
 	public int pos[] = new int[2]; // current position; just player
-	protected String queue[][]; // to render
-	protected String locations[][]; // hidden item locations
-
+	protected String grid[][]; // to render
+	protected String map[][]; // hidden item map
+	
 	// icons directory; usage: icon.get("Player") --> "x"
 	private String icons[] = { "empty", "empty", "empty", "mine", "mine", "mine", "%" }; // probability: empty: 45%, mine:45%, powerup: 5%, treasure:5%
 	public static HashMap<String, String> icon=new HashMap<String,String>(){{
@@ -37,8 +37,8 @@ public class Board {
 		status = "";
 		pos[0] = 0;
 		pos[1] = 0;
-		locations = new String[s][s];
-		queue = new String[s][s];
+		map = new String[s][s];
+		grid = new String[s][s];
 	}
 	
 	public void gen() {
@@ -83,7 +83,7 @@ public class Board {
 			}
 			if (row<size) {
 				for (int column = 0;column<size;column++) {
-					board = board+"| "+queue[row][column]+" ";
+					board = board+"| "+grid[row][column]+" ";
 					if (column==size-1) {
 						board = board+"|\n";
 					}
@@ -94,11 +94,11 @@ public class Board {
 	}
 	
 	private void update(int x, int y, String value) {
-		locations[y][x] = value;
+		map[y][x] = value;
 	}
 	
 	private void render(int x, int y, String value) {
-		queue[y][x] = value;
+		grid[y][x] = value;
 	}
 	
 	public void processMove(String queue) {
@@ -121,21 +121,23 @@ public class Board {
 		render(pos[0],pos[1],icon.get("plr"));
 		
 		// icon setter
-		if (locations[pos[1]][pos[0]] != icon.get("empty")) {
-			render(pos[0],pos[1],locations[pos[1]][pos[0]]);
-			if (locations[pos[1]][pos[0]] == icon.get("mine")) {
+		if (map[pos[1]][pos[0]] != icon.get("empty")) {
+			render(pos[0],pos[1],map[pos[1]][pos[0]]);
+			if (map[pos[1]][pos[0]] == icon.get("mine")) {
 				//TODO: function
-				plr.updateStat("Lifes", -1);
-			} else if (locations[pos[1]][pos[0]] == icon.get("prize")) {
+				if (grid[pos[1]][pos[0]] == icon.get("mine")) {
+					plr.updateStat("Lives", -1);
+				}
+			} else if (map[pos[1]][pos[0]] == icon.get("prize")) {
 				//TODO: function
-				update(pos[1],pos[0],icon.get("empty"));
-			} else if (locations[pos[1]][pos[0]] == icon.get("power")) {
+				plr.updateStat("Score", 50);
+			} else if (map[pos[1]][pos[0]] == icon.get("power")) {
 				//TODO: function
-				update(pos[1],pos[0],icon.get("empty"));
+				plr.updateStat("Power", 5);
 			}
 		}
 		
-		render(posX,posY,locations[posY][posX] != icon.get("mine")?icon.get("empty"):icon.get("mine"));
+		render(posX,posY,map[posY][posX] != icon.get("mine")?icon.get("empty"):icon.get("mine"));
 	}
 }
 
