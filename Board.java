@@ -23,7 +23,15 @@ public class Board {
 	// icons directory; usage: icon.get("Player") --> "x"
 	private String icons[] = { "empty", "empty", "empty", "*", "*", "*", "%" }; // probability: empty: 45%, mine:45%, powerup: 5%, treasure:5%
 	private String benefits[] = { "$", "p" }; // good items: treasure, powerup
-	public static HashMap<String, String> icon=new HashMap<String,String>(){{put("empty"," ");put("$","$");put("p","P");put("*","*");put("plr","x");put("%","TBD");}};
+	public static HashMap<String, String> icon=new HashMap<String,String>(){{
+		put("empty"," ");
+		put("$","$");
+		put("p","P");
+		put("*","*");
+		put("mine","*");
+		put("plr","x");
+		put("%","TBD");
+	}};
 
 	public Board(int s) {
 		size = s;
@@ -107,6 +115,12 @@ public class Board {
 				pos[0] = pos[0]<size-1?pos[0]+1:0;
 			}
 			refresh(pos[0],pos[1],icon.get("plr"));
+			
+			if (locations[pos[1]][pos[0]] != icon.get("empty")) {
+				if (locations[pos[1]][pos[0]] == icon.get("*")) {
+					//TODO: function
+				}
+			}
 		}
 	}
 }
