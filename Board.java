@@ -4,7 +4,7 @@ import java.util.HashMap;
 import static java.lang.System.out;
 import java.util.Arrays;
 
-/* Raymond So, Jia Wei Chen
+/* Raymond So
  * 11.7.24
  * Board Class:
  * TODO: ADD DESC!!!!!!
