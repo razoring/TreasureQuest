@@ -11,6 +11,8 @@ import java.util.Arrays;
  */
 
 public class Board {
+	Player plr = new Player();
+	
 	public int size; // size of board
 	public String status; // "YOU HIT A MINE!" || "YOU GOT AN EXTRA LIFE!"
 
@@ -25,7 +27,7 @@ public class Board {
 
 	public Board(int s) {
 		size = s;
-		status = "";
+		status = "\nWELCOME";
 		pos[0] = 0;
 		pos[1] = 0;
 		locations = new String[s][s];
@@ -54,6 +56,16 @@ public class Board {
 
 	public String display() {
 		String board = status+"\n";
+		board = board+"Lives  Score  Points\n";
+		board = board+plr.getLife();
+		for (int i = 0;i<"Lives  ".length()-(""+plr.getLife()).length();i++) {
+			board = board+" ";
+		}
+		board = board+plr.getStamina();
+		for (int i = 0;i<"Score  ".length()-(""+plr.getStamina()).length();i++) {
+			board = board+" ";
+		}
+		board = board+plr.getPoints()+"\n";
 		
 		for (int row = 0;row<size+1;row++) {
 			for (int column = 0;column<size;column++) {

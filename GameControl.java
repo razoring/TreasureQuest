@@ -17,7 +17,7 @@ public class GameControl {
 				+ "- WASD to navigate \n"
 				+ " (Ability to queue multiple keystrokes in one line) \n"
 				+ "- Death upon mine \n"
-				+ "- Death upon zero points \n");
+				+ "- Death upon score zero \n");
 		System.out.println("// TO BEGIN:\n"
 				+ "Enter an integer to represent the map size (E.g: 5 = 5x5)");
 		int size = reader.nextInt();  // TODO: Error checking; check if mis-input of string
