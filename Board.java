@@ -26,7 +26,7 @@ public class Board {
 	public static HashMap<String, String> icon=new HashMap<String,String>(){{
 		put("empty"," ");
 		put("prize","$");
-		put("powerup","P");
+		put("power","P");
 		put("mine","*");
 		put("plr","x");
 		put("%","TBD");
@@ -34,7 +34,7 @@ public class Board {
 
 	public Board(int s) {
 		size = s;
-		status = "\nWELCOME";
+		status = "";
 		pos[0] = 0;
 		pos[1] = 0;
 		locations = new String[s][s];
@@ -119,10 +119,13 @@ public class Board {
 				render(pos[0],pos[1],locations[pos[1]][pos[0]]);
 				if (locations[pos[1]][pos[0]] == icon.get("*")) {
 					//TODO: function
-				} else if (locations[pos[1]][pos[0]] == icon.get("prize") || locations[pos[1]][pos[0]] == icon.get("powerup")) {
+				} else if (locations[pos[1]][pos[0]] == icon.get("prize")) {
 					//TODO: function
 					update(pos[1],pos[0],icon.get("empty"));
-				} 
+				} else if (locations[pos[1]][pos[0]] == icon.get("power")) {
+					//TODO: function
+					update(pos[1],pos[0],icon.get("empty"));
+				}
 			}
 		}
 	}
