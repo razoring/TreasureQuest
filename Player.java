@@ -4,13 +4,13 @@ import static java.lang.System.out;
 
 public class Player {
 	private static int lives;
-	private static int stamina;
-	private static int points;
+	private static int power;
+	private static int score;
 	
 	public Player() {
 		lives = 1;
-		stamina = 25;
-		points = 0;
+		power = 25;
+		score = 0;
 	}
 	
 	public int getLife() {
@@ -18,23 +18,23 @@ public class Player {
 	}
 	
 	public int getStamina() {
-		return stamina;
+		return power;
 	}
 	
-	public int getPoints() {
-		return points;
+	public int getScore() {
+		return score;
 	}
 	
-	public void update(String type, int val) {
+	public void updateStat(String type, int val) {
 		switch(type) {
-			case "Life": 
+			case "Lives": 
 				lives += val;
 				break;
-			case "Points":
-				points += val;
+			case "Score":
+				score += val;
 				break;
-			case "Stamina":
-				stamina += val;
+			case "Power":
+				power += val;
 				break;
 		}
 	}

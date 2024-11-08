@@ -40,11 +40,12 @@ public class Board {
 		locations = new String[s][s];
 		queue = new String[s][s];
 	}
-
+	
 	public void gen() {
 		for (int x = 0; x < size; x++) {
 			for (int y = 0; y < size; y++) {
 				int rand = (int) (Math.random() * icons.length);
+				//TODO: Randomize plr starting position
 				if (x == 0 && y == 0) {
 					update(0,0,icon.get("plr"));
 					render(0,0,icon.get("plr"));
@@ -71,7 +72,7 @@ public class Board {
 		for (int i = 0;i<"Score  ".length()-(""+plr.getStamina()).length();i++) {
 			board = board+" ";
 		}
-		board = board+plr.getPoints()+"\n";
+		board = board+plr.getScore()+"\n";
 		
 		for (int row = 0;row<size+1;row++) {
 			for (int column = 0;column<size;column++) {
@@ -101,32 +102,40 @@ public class Board {
 	}
 	
 	public void processMove(String queue) {
-		for (int i = 0;i<queue.length();i++) {
-			render(pos[0],pos[1],icon.get("empty"));
-			if (queue.charAt(i)=='w'||queue.charAt(i)=='W') {
-				pos[1] = pos[1]>0?pos[1]-1:0;
-			} else if (queue.charAt(i)=='s'||queue.charAt(i)=='S') {
-				pos[1] = pos[1]<size-1?pos[1]+1:0;
-			} else if (queue.charAt(i)=='a'||queue.charAt(i)=='A') {
-				pos[0] = pos[0]>0?pos[0]-1:0;
-			} else if (queue.charAt(i)=='d'||queue.charAt(i)=='D') {
-				pos[0] = pos[0]<size-1?pos[0]+1:0;
-			}
-			render(pos[0],pos[1],icon.get("plr"));
-			
-			if (locations[pos[1]][pos[0]] != icon.get("empty")) {
-				render(pos[0],pos[1],locations[pos[1]][pos[0]]);
-				if (locations[pos[1]][pos[0]] == icon.get("*")) {
-					//TODO: function
-				} else if (locations[pos[1]][pos[0]] == icon.get("prize")) {
-					//TODO: function
-					update(pos[1],pos[0],icon.get("empty"));
-				} else if (locations[pos[1]][pos[0]] == icon.get("power")) {
-					//TODO: function
-					update(pos[1],pos[0],icon.get("empty"));
-				}
+		int posX = pos[0];
+		int posY = pos[1];
+		
+		int i = 0;
+		out.println(i);
+		
+		// movement logic
+		if (queue.charAt(i)=='w'||queue.charAt(i)=='W') {
+			pos[1] = pos[1]>0?pos[1]-1:0;
+		} else if (queue.charAt(i)=='s'||queue.charAt(i)=='S') {
+			pos[1] = pos[1]<size-1?pos[1]+1:size-1;
+		} else if (queue.charAt(i)=='a'||queue.charAt(i)=='A') {
+			pos[0] = pos[0]>0?pos[0]-1:0;
+		} else if (queue.charAt(i)=='d'||queue.charAt(i)=='D') {
+			pos[0] = pos[0]<size-1?pos[0]+1:size-1;
+		}
+		render(pos[0],pos[1],icon.get("plr"));
+		
+		// icon setter
+		if (locations[pos[1]][pos[0]] != icon.get("empty")) {
+			render(pos[0],pos[1],locations[pos[1]][pos[0]]);
+			if (locations[pos[1]][pos[0]] == icon.get("mine")) {
+				//TODO: function
+				plr.updateStat("Lifes", -1);
+			} else if (locations[pos[1]][pos[0]] == icon.get("prize")) {
+				//TODO: function
+				update(pos[1],pos[0],icon.get("empty"));
+			} else if (locations[pos[1]][pos[0]] == icon.get("power")) {
+				//TODO: function
+				update(pos[1],pos[0],icon.get("empty"));
 			}
 		}
+		
+		render(posX,posY,locations[posY][posX] != icon.get("mine")?icon.get("empty"):icon.get("mine"));
 	}
 }
 
