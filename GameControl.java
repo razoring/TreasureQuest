@@ -17,6 +17,7 @@ public class GameControl {
 	}
 	
 	public static void main(String[] args) {
+		boolean alive = true;
 		// TODO Auto-generated method stub
 		System.out.println(""
 				+ "▄▄▄▄▄▄▄▄▄  ▄▄▄ . ▄▄▄· .▄▄ · ▄• ▄▌▄▄▄  ▄▄▄▀.   .▄▄▄  ▄• ▄▌▄▄▄ ..▄▄· ▄▄▄▄▄\n"
@@ -31,13 +32,52 @@ public class GameControl {
 				+ "- Death upon score zero \n");
 		System.out.println("// TO BEGIN:\n"
 				+ "Enter an integer to represent the map size (E.g: 5 = 5x5)");
-		
 		Board board = new Board(check());
 		board.gen();
-		while (true) {
+		while (alive) {
 			System.out.println(board.display());
+			System.out.println("Enter your next movement (WASD):");
 			String input = reader.nextLine();
 			board.processMove(input);
+			board.plr.updateStat("Power", -1);
+			
+			if (board.plr.getLife() <= 0) {
+				System.out.println(board.display());
+				System.err.println("You died!");
+				
+				if (board.plr.getScore() >= 20) {
+					if (deathCheck()) {
+						board.plr.updateStat("Score", -20);
+						board.plr.updateStat("Lives", 1);
+					} else {
+						alive = false;
+					}
+				} else {
+					alive = false;
+				}
+			} 
+			
+			if (board.plr.getPower() <= 0) {
+				System.out.println(board.display());
+				System.err.println("You ran out of power!");
+				alive = false;
+			}
+		}
+		
+		System.out.println("Game over!");
+	}
+	
+	public static boolean deathCheck() {
+		System.out.println("Would you like to spend 20pts to buy another life? (Y/N)");
+		String response = reader.nextLine();
+		switch(response.toUpperCase()) {
+			case "Y":
+				return true;
+			case "N":
+				return false;
+			default:
+				System.out.println("Invalid input.");
+				return deathCheck();
 		}
 	}
 }

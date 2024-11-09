@@ -17,7 +17,7 @@ public class Player {
 		return lives;
 	}
 	
-	public int getStamina() {
+	public int getPower() {
 		return power;
 	}
 	

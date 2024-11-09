@@ -68,8 +68,8 @@ public class Board {
 		for (int i = 0;i<"Lives  ".length()-(""+plr.getLife()).length();i++) {
 			board = board+" ";
 		}
-		board = board+plr.getStamina();
-		for (int i = 0;i<"Score  ".length()-(""+plr.getStamina()).length();i++) {
+		board = board+plr.getPower();
+		for (int i = 0;i<"Score  ".length()-(""+plr.getPower()).length();i++) {
 			board = board+" ";
 		}
 		board = board+plr.getScore()+"\n";
