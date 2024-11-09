@@ -122,11 +122,17 @@ public class Board {
 			// icon setter
 			if (map[pos[1]][pos[0]] != icon.get("empty")) {
 				render(pos[0],pos[1],map[pos[1]][pos[0]]);
-				if (map[pos[1]][pos[0]] == icon.get("mine")) {
+				if (grid[pos[1]][pos[0]] == icon.get("mine")) {
 					//TODO: function
-					if (grid[pos[1]][pos[0]] == icon.get("mine")) {
+					//if (grid[pos[1]][pos[0]] == icon.get("mine")) {
+						System.out.println("Grid Tile: " + grid[pos[1]][pos[0]]);
+						System.out.println("Map Tile: " + map[pos[1]][pos[0]]);
 						plr.updateStat("Lives", -1);
-					}
+						//TODO: Figure ts out
+						grid[pos[1]][pos[0]] = icon.get("empty");
+						render(pos[1], pos[0], grid[pos[1]][pos[0]]);
+						update(pos[1], pos[0], grid[pos[1]][pos[0]]);
+					//}
 				} else if (map[pos[1]][pos[0]] == icon.get("prize")) {
 					//TODO: function
 					plr.updateStat("Score", 50);

@@ -8,9 +8,9 @@ public class Player {
 	private static int score;
 	
 	public Player() {
-		lives = 1;
+		lives = 3;
 		power = 25;
-		score = 0;
+		score = 10000;
 	}
 	
 	public int getLife() {
