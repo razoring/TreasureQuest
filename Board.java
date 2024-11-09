@@ -22,6 +22,7 @@ public class Board {
 	
 	// icons directory; usage: icon.get("Player") --> "x"
 	private String icons[] = { "empty", "empty", "empty", "mine", "mine", "%" }; // probability: empty: 45%, mine:45%, powerup: 5%, treasure:5%
+	@SuppressWarnings("serial")
 	public static HashMap<String, String> icon=new HashMap<String,String>(){{
 		put("empty"," ");
 		put("prize","$");
@@ -83,7 +84,7 @@ public class Board {
 			}
 			if (row<size) {
 				for (int column = 0;column<size;column++) {
-					board = board+"| "+grid[row][column]+" ";
+					board = board+"| " + grid[row][column]+" ";
 					if (column==size-1) {
 						board = board+"|\n";
 					}
@@ -122,16 +123,14 @@ public class Board {
 			// icon setter
 			if (map[pos[1]][pos[0]] != icon.get("empty")) {
 				render(pos[0],pos[1],map[pos[1]][pos[0]]);
-				if (grid[pos[1]][pos[0]] == icon.get("mine")) {
+				if (map[pos[1]][pos[0]] == icon.get("mine")) {
 					//TODO: function
-					//if (grid[pos[1]][pos[0]] == icon.get("mine")) {
 						System.out.println("Grid Tile: " + grid[pos[1]][pos[0]]);
 						System.out.println("Map Tile: " + map[pos[1]][pos[0]]);
 						plr.updateStat("Lives", -1);
 						//TODO: Figure ts out
-						grid[pos[1]][pos[0]] = icon.get("empty");
-						render(pos[1], pos[0], grid[pos[1]][pos[0]]);
-						update(pos[1], pos[0], grid[pos[1]][pos[0]]);
+						map[pos[1]][pos[0]] = icon.get("empty"); //updates invis 
+						//render(pos[0], pos[1], icon.get("empty")); //updates invis
 					//}
 				} else if (map[pos[1]][pos[0]] == icon.get("prize")) {
 					//TODO: function
@@ -143,7 +142,7 @@ public class Board {
 			}
 
 			render(pos[0],pos[1],icon.get("plr"));
-			render(posX,posY,map[posY][posX]!=icon.get("mine")?(map[posY][posX]==icon.get("plr")?icon.get("plr"):icon.get("empty")):icon.get("mine"));
+			render(posX,posY,grid[posY][posX]!=icon.get("mine")?(map[posY][posX]==icon.get("plr")?icon.get("plr"):icon.get("empty")):icon.get("mine"));
 		}
 	}
 }
