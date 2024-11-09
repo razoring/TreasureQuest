@@ -27,7 +27,6 @@ public class GameControl {
 				+ "  ▀▀▀ .▀  ▀ ▀▀▀  ▀  ▀  ▀▀▀▀  ▀▀▀ .▀  ▀ ▀▀▀     ·▀▀█.  ▀▀▀  ▀▀▀  ▀▀▀▀  ▀▀▀ ");
 		System.out.println("// INSTRUCTIONS:\n"
 				+ "- WASD to navigate \n"
-				+ " (Ability to queue multiple keystrokes in one line) \n"
 				+ "- Death upon mine \n"
 				+ "- Death upon score zero \n");
 		System.out.println("// TO BEGIN:\n"
