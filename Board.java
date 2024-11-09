@@ -21,7 +21,7 @@ public class Board {
 	protected String map[][]; // hidden item map
 	
 	// icons directory; usage: icon.get("Player") --> "x"
-	private String icons[] = { "empty", "empty", "empty", "mine", "mine", "mine", "%" }; // probability: empty: 45%, mine:45%, powerup: 5%, treasure:5%
+	private String icons[] = { "empty", "empty", "empty", "mine", "mine", "%" }; // probability: empty: 45%, mine:45%, powerup: 5%, treasure:5%
 	public static HashMap<String, String> icon=new HashMap<String,String>(){{
 		put("empty"," ");
 		put("prize","$");
@@ -35,8 +35,8 @@ public class Board {
 	public Board(int s) {
 		size = s;
 		status = "";
-		pos[0] = 0;
-		pos[1] = 0;
+		pos[0] = ((int)(Math.random()*s));
+		pos[1] = ((int)(Math.random()*s));
 		map = new String[s][s];
 		grid = new String[s][s];
 	}
@@ -46,9 +46,9 @@ public class Board {
 			for (int y = 0; y < size; y++) {
 				int rand = (int) (Math.random() * icons.length);
 				//TODO: Randomize plr starting position
-				if (x == 0 && y == 0) {
-					update(0,0,icon.get("plr"));
-					render(0,0,icon.get("plr"));
+				if (x == pos[0] && y == pos[1]) {
+					render(pos[0],pos[1],icon.get("plr"));
+					update(pos[0],pos[1],icon.get("empty"));
 				} else {
 					if (icon.get(icons[rand]) == "TBD") {
 						update(x,y,icon.get(benefits[(int) (Math.random() * benefits.length)]));
@@ -101,43 +101,44 @@ public class Board {
 		grid[y][x] = value;
 	}
 	
-	public void processMove(String queue) {
-		int posX = pos[0];
-		int posY = pos[1];
-		
-		int i = 0;
-		out.println(i);
-		
-		// movement logic
-		if (queue.charAt(i)=='w'||queue.charAt(i)=='W') {
-			pos[1] = pos[1]>0?pos[1]-1:0;
-		} else if (queue.charAt(i)=='s'||queue.charAt(i)=='S') {
-			pos[1] = pos[1]<size-1?pos[1]+1:size-1;
-		} else if (queue.charAt(i)=='a'||queue.charAt(i)=='A') {
-			pos[0] = pos[0]>0?pos[0]-1:0;
-		} else if (queue.charAt(i)=='d'||queue.charAt(i)=='D') {
-			pos[0] = pos[0]<size-1?pos[0]+1:size-1;
-		}
-		render(pos[0],pos[1],icon.get("plr"));
-		
-		// icon setter
-		if (map[pos[1]][pos[0]] != icon.get("empty")) {
-			render(pos[0],pos[1],map[pos[1]][pos[0]]);
-			if (map[pos[1]][pos[0]] == icon.get("mine")) {
-				//TODO: function
-				if (grid[pos[1]][pos[0]] == icon.get("mine")) {
-					plr.updateStat("Lives", -1);
-				}
-			} else if (map[pos[1]][pos[0]] == icon.get("prize")) {
-				//TODO: function
-				plr.updateStat("Score", 50);
-			} else if (map[pos[1]][pos[0]] == icon.get("power")) {
-				//TODO: function
-				plr.updateStat("Power", 5);
+	public void processMove(String keystroke) {
+		if (keystroke.length()>0) {
+			int posX = pos[0];
+			int posY = pos[1];
+			
+			int i = 0;
+			
+			// movement logic
+			if (keystroke.charAt(i)=='w'||keystroke.charAt(i)=='W') {
+				pos[1] = pos[1]>0?pos[1]-1:0;
+			} else if (keystroke.charAt(i)=='s'||keystroke.charAt(i)=='S') {
+				pos[1] = pos[1]<size-1?pos[1]+1:size-1;
+			} else if (keystroke.charAt(i)=='a'||keystroke.charAt(i)=='A') {
+				pos[0] = pos[0]>0?pos[0]-1:0;
+			} else if (keystroke.charAt(i)=='d'||keystroke.charAt(i)=='D') {
+				pos[0] = pos[0]<size-1?pos[0]+1:size-1;
 			}
+			
+			// icon setter
+			if (map[pos[1]][pos[0]] != icon.get("empty")) {
+				render(pos[0],pos[1],map[pos[1]][pos[0]]);
+				if (map[pos[1]][pos[0]] == icon.get("mine")) {
+					//TODO: function
+					if (grid[pos[1]][pos[0]] == icon.get("mine")) {
+						plr.updateStat("Lives", -1);
+					}
+				} else if (map[pos[1]][pos[0]] == icon.get("prize")) {
+					//TODO: function
+					plr.updateStat("Score", 50);
+				} else if (map[pos[1]][pos[0]] == icon.get("power")) {
+					//TODO: function
+					plr.updateStat("Power", 5);
+				}
+			}
+
+			render(pos[0],pos[1],icon.get("plr"));
+			render(posX,posY,map[posY][posX]!=icon.get("mine")?(map[posY][posX]==icon.get("plr")?icon.get("plr"):icon.get("empty")):icon.get("mine"));
 		}
-		
-		render(posX,posY,map[posY][posX] != icon.get("mine")?icon.get("empty"):icon.get("mine"));
 	}
 }
 
