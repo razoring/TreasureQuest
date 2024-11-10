@@ -38,7 +38,7 @@ public class Board {
 		put("prize","$");
 		put("power","P");
 		put("mine","*");
-		put("plr","x");
+		put("plr","+");
 		put("%","TBD");
 	}};
 	private String benefits[] = {"prize", "power" }; // good items: treasure, powerup
