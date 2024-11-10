@@ -1,7 +1,6 @@
 package TreasureQuest;
 
 import java.util.HashMap;
-import static java.lang.System.out;
 import java.util.Arrays;
 
 /* Raymond So
