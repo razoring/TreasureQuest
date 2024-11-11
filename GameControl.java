@@ -27,6 +27,7 @@ public class GameControl {
 				+ "  ▀▀▀ .▀  ▀ ▀▀▀  ▀  ▀  ▀▀▀▀  ▀▀▀ .▀  ▀ ▀▀▀     ·▀▀█.  ▀▀▀  ▀▀▀  ▀▀▀▀  ▀▀▀ ");
 		System.out.println("// INSTRUCTIONS:\n"
 				+ "* WASD to navigate \n"
+				+ "- Time limit of 5 minutes \n"
 				+ "- Win by collecting all the rewards \n"
 				+ "- Death upon zero lives/points \n"
 				+ "- Points are required to move \n"
@@ -35,6 +36,10 @@ public class GameControl {
 				+ "- Lives can be used to replenish points \n"
 				+ "- Treasure gives 50 points \n"
 				+ "- Power-ups give 20 points and an extra life \n"
+				+ "- Extra lives depending on difficulty \n"
+				+ "- Deactivated mines are persistent depicted as '*' \n"
+				+ "- Treasures are persistent depicted as '$' \n"
+				+ "- Power-ups are depicted as 'P' \n"
 				+ "- Extra lives depending on difficulty \n");
 		System.out.println("// TO BEGIN:\n"
 				+ "Enter an integer to represent the map size (E.g: 5 = 5x5) \n"

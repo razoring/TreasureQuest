@@ -22,6 +22,7 @@ public class Board {
 	protected String grid[][]; // to render
 	protected String map[][]; // hidden item map
 	protected String disarmed[][]; // inital hidden item map
+	public double timeLeft;
 	
 	// generation logic
 	private double mineMax = 6; // difficulty increases
@@ -51,15 +52,16 @@ public class Board {
 		disarmed = new String[s][s];
 		grid = new String[s][s];
 		plr = new Player(debug?10:1,s*s); // init stats: lives, points
+		timeLeft = System.currentTimeMillis();
 	}
 	
 	public void gen(int difficulty) {
 		// generate rng table
-		difficulty = difficulty+Math.floorDiv(difficulty,2);
+		difficulty = difficulty+Math.floorDiv(difficulty,2); 
 		icons = new ArrayList<String>();
 		mineMax = mineMax+difficulty;
 		benefitMax = Math.max(benefitMax-difficulty, 2); // make sure two are always present
-		plr.updateStat("Lives",Math.min(Math.floorDiv(difficulty,size), size*2)); // give player more health depending on difficulty
+		plr.updateStat("Lives",Math.min(Math.floorDiv(difficulty,size*2), size*2)); // give player more health depending on difficulty
 		
 		for (int i = 0;i<(int)(mineMax);i++) {
 			icons.add("mine");
@@ -130,6 +132,8 @@ public class Board {
 		if ((plr.getLives()<=0&&plr.getPoints()<20) || (benefitCount<=0) ) { debug=true; };
 		
 		String board = "\n";
+		
+		board = board+"Time Left: "+(300-(int)((System.currentTimeMillis()-timeLeft)/100))+"s\n";
 		board = board+"Lives  Points\n";
 		board = board+plr.getLives();
 		for (int i = 0;i<"Lives  ".length()-(""+plr.getLives()).length();i++) {
