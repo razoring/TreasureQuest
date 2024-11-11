@@ -38,7 +38,7 @@ public class GameControl {
 				+ "- Extra lives depending on difficulty \n");
 		System.out.println(
 				"// TO BEGIN:\n" + "Enter an integer to represent the map size (E.g: 5 = 5x5) \n" + "(Minimum of 3x3)");
-		Board board = new Board(Math.max(check(), 3)); // auto 3 or best size
+		Board board = new Board(Math.max(check(), 5)); // auto 3 or best size
 		System.out.println("// SELECT DIFFICULTY:\n"
 				+ "Enter an integer to represent difficulty multiplier (E.g: 0 = Easy) \n" + "(Maximum of 15)");
 		board.gen(Math.min(check(), 15)); // auto 5 or best setting

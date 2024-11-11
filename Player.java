@@ -3,8 +3,8 @@ package TreasureQuest;
 import static java.lang.System.out;
 
 public class Player {
-	private static int lives;
-	private static int points;
+	private static int lives; // power
+	private static int points; // score
 	
 	public Player(int l, int p) {
 		lives = l;
