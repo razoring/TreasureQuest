@@ -230,11 +230,7 @@ public class Board {
 					//mine function
 					mineCount--;
 					set(pos[0],pos[1],icon.get("mine"));
-<<<<<<< Updated upstream
 					System.err.println("You stepped on a mine!");
-=======
-					System.err.println("You stepped on a mine");
->>>>>>> Stashed changes
 					plr.updateStat("Lives", -1);
 				} else if (map[pos[1]][pos[0]] == icon.get("prize")) {
 					//treasure function
