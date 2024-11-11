@@ -23,6 +23,7 @@ public class Board {
 	protected String map[][]; // hidden item map
 	protected String disarmed[][]; // inital hidden item map
 	public double timeLeft;
+	public int difficulty;
 	
 	// generation logic
 	private double mineMax = 6; // difficulty increases
@@ -33,7 +34,7 @@ public class Board {
 	public int benefitCount = 0;
 	ArrayList<String> icons;
 
-	// icons directory; usage: icon.get("Player") --> "x"
+	// icons directory; usage: icon.get("Player") --> "+"
 	public static HashMap<String, String> icon = new HashMap<String,String>(){{ // initialize STATIC hash map for easier referencing of icons
 		put("empty"," ");
 		put("prize","$");
@@ -53,15 +54,17 @@ public class Board {
 		grid = new String[s][s];
 		plr = new Player(debug?10:1,s*s); // init stats: lives, points
 		timeLeft = System.currentTimeMillis();
+		difficulty = 0;
 	}
 	
-	public void gen(int difficulty) {
+	public void gen(int d) {
 		// generate rng table
-		difficulty = difficulty+Math.floorDiv(difficulty,2); 
+		this.difficulty = d;
+		d = difficulty+Math.floorDiv(d,2); 
 		icons = new ArrayList<String>();
-		mineMax = mineMax+difficulty;
-		benefitMax = Math.max(benefitMax-difficulty, 2); // make sure two are always present
-		plr.updateStat("Lives",Math.min(Math.floorDiv(difficulty,size*2), size*2)); // give player more health depending on difficulty
+		mineMax = mineMax+d;
+		benefitMax = Math.max(benefitMax-d, 2); // make sure two are always present
+		plr.updateStat("Lives",Math.min(Math.floorDiv(d,size*2), size*2)); // give player more health depending on difficulty
 		
 		for (int i = 0;i<(int)(mineMax);i++) {
 			icons.add("mine");
@@ -227,7 +230,11 @@ public class Board {
 					//mine function
 					mineCount--;
 					set(pos[0],pos[1],icon.get("mine"));
+<<<<<<< Updated upstream
 					System.err.println("You stepped on a mine!");
+=======
+					System.err.println("You stepped on a mine");
+>>>>>>> Stashed changes
 					plr.updateStat("Lives", -1);
 				} else if (map[pos[1]][pos[0]] == icon.get("prize")) {
 					//treasure function
