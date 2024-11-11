@@ -1,7 +1,5 @@
 package TreasureQuest;
 
-import static java.lang.System.out;
-
 public class Player {
 	private static int lives; // power
 	private static int points; // score
