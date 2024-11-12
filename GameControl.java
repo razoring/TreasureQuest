@@ -79,7 +79,12 @@ public class GameControl {
 			System.out.println(board.display());
 			System.out.println("Enter your next movement (WASD):");
 			String input = reader.nextLine();
-			board.processMove(input);
+			if (board.timeElapsed>=1) {
+				board.processMove(input);
+			} else {
+				System.err.println("You ran out of time");
+				alive = false;
+			}
 
 			if (board.plr.getLives() <= 0 || board.plr.getPoints() <= 0) {
 				System.out.println(board.display());
@@ -127,7 +132,7 @@ public class GameControl {
 			FileWriter myWriter = new FileWriter("highscores.txt");
 			myWriter.write(name.nextLine() + ": " + (board.plr.getPoints() + board.plr.getLives() * 20)
 					+ " (Difficulty:" + board.difficulty + " Elapsed:"
-					+ ((int) ((System.currentTimeMillis() - board.timeLeft) / 100)) + "s)\n" + curFile);
+					+ ((int) ((System.currentTimeMillis() - board.timeElapsed) / 100)) + "s)\n" + curFile);
 			myWriter.close();
 		} catch (IOException e) {
 			System.err.println("An error occurred.");
