@@ -22,7 +22,7 @@ public class Board {
 	protected String grid[][]; // to render
 	protected String map[][]; // hidden item map
 	protected String disarmed[][]; // inital hidden item map
-	public double timeLeft;
+	public double timeElapsed;
 	public int difficulty;
 	
 	// generation logic
@@ -132,41 +132,45 @@ public class Board {
 	}
 
 	public String display() {
-		if ((plr.getLives()<=0&&plr.getPoints()<20) || (benefitCount<=0) ) { debug=true; };
-		
-		String board = "\n";
-		
-		board = board+"Time Left: "+(300-(int)((System.currentTimeMillis()-timeLeft)/100))+"s\n";
-		board = board+"Lives  Points\n";
-		board = board+plr.getLives();
-		for (int i = 0;i<"Lives  ".length()-(""+plr.getLives()).length();i++) {
-			board = board+" ";
-		}
-		board = board+plr.getPoints();
-		for (int i = 0;i<"Points  ".length()-(""+plr.getLives()).length();i++) {
-			board = board+" ";
-		}
-		board = board+"\n";
-		
-		for (int row = 0;row<size+1;row++) {
-			for (int column = 0;column<size;column++) {
-				board = board+"+---";
-				if (column==size-1) {
-					board = board+"+\n";
-				}
+		if (timeElapsed>=0) {
+			if ((plr.getLives()<=0&&plr.getPoints()<20) || (benefitCount<=0) ) { debug=true; }; // enables cheats/all item positions depending on conditions
+			
+			String board = "\n";
+			
+			board = board+"Time Left: "+(300-(int)((System.currentTimeMillis()-timeLeft)/100))+"s\n";
+			board = board+"Lives  Points\n";
+			board = board+plr.getLives();
+			for (int i = 0;i<"Lives  ".length()-(""+plr.getLives()).length();i++) {
+				board = board+" ";
 			}
-			if (row<size) {
+			board = board+plr.getPoints();
+			for (int i = 0;i<"Points  ".length()-(""+plr.getLives()).length();i++) {
+				board = board+" ";
+			}
+			board = board+"\n";
+			
+			for (int row = 0;row<size+1;row++) {
 				for (int column = 0;column<size;column++) {
-					board = board+"| "+(debug?map[row][column]:grid[row][column])+" ";
+					board = board+"+---";
 					if (column==size-1) {
-						board = board+"|\n";
+						board = board+"+\n";
+					}
+				}
+				if (row<size) {
+					for (int column = 0;column<size;column++) {
+						board = board+"| "+(debug?map[row][column]:grid[row][column])+" ";
+						if (column==size-1) {
+							board = board+"|\n";
+						}
 					}
 				}
 			}
+			board = board+mineCount+" Mines Left\n"+benefitCount+" Rewards Left";
+			
+			return board;
+		} else {
+			
 		}
-		board = board+mineCount+" Mines Left\n"+benefitCount+" Rewards Left";
-		
-		return board;
 	}
 	
 	private void update(int x, int y, String value) {

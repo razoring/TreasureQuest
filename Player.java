@@ -2,6 +2,12 @@ package TreasureQuest;
 
 import static java.lang.System.out;
 
+/*
+ * Jia Wei Chen
+ * 11.11.24
+ * TODO: ADD DESC
+ */
+
 public class Player {
 	private static int lives; // power
 	private static int points; // score

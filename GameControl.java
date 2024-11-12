@@ -6,6 +6,21 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/*
+ * TODO: Exclaimation Mark represents priority
+ * !!! Code Comments
+ * !!! Headers for each file (credits, desc, date)
+ * !!! Response for EVERY error
+ * !!! Input checking for EVERY input
+ * !!! Function Docstrings???? (I lost marks for this last time so just in case)
+ * !! Remove all commented out code
+ * !! Optimize (If Possible)
+ * !! Fix Min/Max silent error handling and tell user to re-input in this file
+ * !! Make timer into 5:00 instead of 300s
+ * ! Colored icons
+ * ! Make it prettier
+ */
+
 public class GameControl {
 	static Scanner reader = new Scanner(System.in);
 
@@ -22,26 +37,44 @@ public class GameControl {
 	public static void main(String[] args) {
 		boolean alive = true;
 		// TODO Auto-generated method stub
-		System.out.println(""
-				+ "▄▄▄▄▄▄▄▄▄  ▄▄▄ . ▄▄▄· .▄▄ · ▄• ▄▌▄▄▄  ▄▄▄▀.   .▄▄▄  ▄• ▄▌▄▄▄ ..▄▄· ▄▄▄▄▄\n"
+		System.out.println("" + "▄▄▄▄▄▄▄▄▄  ▄▄▄ . ▄▄▄· .▄▄ · ▄• ▄▌▄▄▄  ▄▄▄▀.   .▄▄▄  ▄• ▄▌▄▄▄ ..▄▄· ▄▄▄▄▄\n"
 				+ " •██  ▀▄ █·▀▄.▀·▐█ ▀█ ▐█ ▀. █▪██▌▀▄ █·▀▄.·    ▐▀•▀█ █▪██▌▀▄.▀·▐█ ▀. •██  \n"
 				+ "  ▐█.▪▐▀▀▄ ▐▀▀▪▄▄█▀▀█ ▄▀▀▀█▄█▌▐█▌▐▀▀▄ ▐▀▀▪    █▌·.█▌█▌▐█▌▐▀▀▪▄▄▀▀▀█▄ ▐█.▪\n"
 				+ "  ▐█▌·▐█•█▌▐█▄▄▌▐█ ▪▐▌▐█▄▪▐█▐█▄█▌▐█•█▌▐█▄▄▌    ▐█▪▄█·▐█▄█▌▐█▄▄▌▐█▄▪▐█ ▐█▌·\n"
 				+ "  ▀▀▀ .▀  ▀ ▀▀▀  ▀  ▀  ▀▀▀▀  ▀▀▀ .▀  ▀ ▀▀▀     ·▀▀█.  ▀▀▀  ▀▀▀  ▀▀▀▀  ▀▀▀ ");
-		System.out.println("// INSTRUCTIONS:\n" + "* WASD to navigate \n" + "- Time limit of 5 minutes \n"
-				+ "- Win by collecting all the rewards \n" + "- Death upon zero lives/points \n"
-				+ "- Points are required to move \n" + "- Points are used to purchase lives \n"
-				+ "- Lives are used to resurrect \n" + "- Lives can be used to replenish points \n"
-				+ "- Treasure gives 50 points \n" + "- Power-ups give 20 points and an extra life \n"
-				+ "- Extra lives depending on difficulty \n" + "- Deactivated mines are persistent depicted as '*' \n"
+		System.out.println("// INSTRUCTIONS:\n" + "* WASD to navigate \n"
+				+ "- Deactivated mines are persistent depicted as '*' \n"
 				+ "- Treasures are persistent depicted as '$' \n" + "- Power-ups are depicted as 'P' \n"
-				+ "- Extra lives depending on difficulty \n");
+				+ "- Time limit of 5 minutes \n" + "- Win by collecting all the rewards \n"
+				+ "- Death upon zero lives/points \n" + "- Points are required to move \n"
+				+ "- Points are used to purchase lives \n" + "- Lives are used to resurrect \n"
+				+ "- Lives can be used to replenish points \n" + "- Treasure gives 50 points \n"
+				+ "- Power-ups give 20 points and an extra life \n" + "- Extra lives depending on difficulty \n");
+
+		try {
+			String scores = "// SCORES:\n";
+			File score = new File("highscores.txt");
+			score.createNewFile();
+
+			Scanner scoreReader = new Scanner(score);
+			while (scoreReader.hasNextLine()) {
+				String data = scoreReader.nextLine();
+				scores = scores + data + "\n";
+			}
+			scoreReader.close();
+			out.println(scores);
+		} catch (IOException e) {
+			System.err.println("An error occurred.");
+			e.printStackTrace();
+		}
+
 		System.out.println(
-				"// TO BEGIN:\n" + "Enter an integer to represent the map size (E.g: 5 = 5x5) \n" + "(Minimum of 3x3)");
+				"// TO BEGIN:\n" + "Enter an integer to represent the map size (E.g: 5 = 5x5) \n" + "(Minimum of 5x5)");
 		Board board = new Board(Math.max(check(), 5)); // auto 3 or best size
 		System.out.println("// SELECT DIFFICULTY:\n"
 				+ "Enter an integer to represent difficulty multiplier (E.g: 0 = Easy) \n" + "(Maximum of 15)");
-		board.gen(Math.min(check(), 15)); // auto 5 or best setting
+
+		board.gen(Math.min(check(), 15)); // auto or best setting
 		while (alive) {
 			System.out.println(board.display());
 			System.out.println("Enter your next movement (WASD):");
