@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import static java.lang.System.out;
 
-/* Raymond So
- * 11.7.24
- * Board Class:
- * TODO: ADD DESC!!!!!!
+/**
+ * Jiawei Chen, Raymond So <p>
+ * 11/14/2024 <p>
+ * Parent class for all board functions. Contains methods for all special tiles, board generation/display and time limits.
  */
 
 public class Board {
@@ -44,7 +44,11 @@ public class Board {
 		put("%","TBD");
 	}};
 	private String benefits[] = {"prize", "power" }; // good items: treasure, powerup
-
+	
+	/**
+	 * Constructor initializing random starting position, rendering map, map icons, initial player statistics, and initializing the timer.
+	 * @param s Board dimensions.
+	 */
 	public Board(int s) {
 		size = s;
 		pos[0] = ((int)(Math.random()*s));
@@ -57,6 +61,10 @@ public class Board {
 		difficulty = 0;
 	}
 	
+	/**
+	 * Generates the hidden map containing all special tiles.
+	 * @param d Difficulty level on a scale of 0-15, 0 being easiest and 15 being hardest.
+	 */
 	public void gen(int d) {
 		// generate rng table
 		this.difficulty = d;
@@ -131,6 +139,10 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Generates the board and returns it to be displayed.
+	 * @return Rendered board
+	 */
 	public String display() {
 		if ((plr.getLives()<=0&&plr.getPoints()<20) || (benefitCount<=0) ) { debug=true; }; // enables cheats/all item positions depending on conditions
 		
@@ -169,18 +181,40 @@ public class Board {
 		return board;
 	}
 	
+	/**
+	 * Updates the hidden map containing special tile positions.
+	 * @param x horizontal position of tile
+	 * @param y vertical position of tile
+	 * @param value icon to be updated to
+	 */
 	private void update(int x, int y, String value) {
 		map[y][x] = value;
 	}
 	
+	/**
+	 * Updates the initial hidden tile map.
+	 * @param x horizontal position of tile
+	 * @param y vertical position of tile
+	 * @param value icon to be updated to
+	 */
 	private void set(int x, int y, String value) {
 		disarmed[y][x] = value;
 	}
 	
+	/**
+	 * Updates the visible tile map.
+	 * @param x horizontal position of tile
+	 * @param y vertical position of tile
+	 * @param value icon to be updated to
+	 */
 	private void render(int x, int y, String value) {
 		grid[y][x] = value;
 	}
 	
+	/**
+	 * Processes movement key input and moves the player depending on the keystroke given.
+	 * @param keystroke The movement key entered by the user
+	 */
 	public void processMove(String keystroke) {
 		if (keystroke.length()>0) {
 			int lastX = pos[0];
@@ -209,6 +243,8 @@ public class Board {
 				if (pos[0]==lastX) {
 					return;
 				}
+			} else {
+				System.err.println("Please enter a valid movement key! (WASD)");
 			}
 			
 			// icon setter

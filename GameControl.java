@@ -5,38 +5,50 @@ import static java.lang.System.out;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+/**
+ * Jiawei Chen, Raymond So <p>
+ * 11/14/2024 <p>
+ * TreasureQuest main control class. Game functionality is run here.
+ */
 
 /*
  * TODO: Exclaimation Mark represents priority
- * !!! Code Comments
- * !!! Headers for each file (credits, desc, date)
- * !!! Response for EVERY error
- * !!! Input checking for EVERY input
- * !!! Function Docstrings???? (I lost marks for this last time so just in case)
- * !! Remove all commented out code
- * !! Optimize (If Possible)
- * !! Fix Min/Max silent error handling and tell user to re-input in this file
- * !! Make timer into 5:00 instead of 300s
- * ! Colored icons
- * ! Make it prettier
+ * [WIP] !!! Code Comments TODO: Doing this Friday
+ * [DONE] !!! Headers for each file (credits, desc, date)
+ * [DEFERRED] !!! Response for EVERY error TODO: WHERE
+ * [DONE?] !!! Input checking for EVERY input TODO: Raymond - Check
+ * [DONE] !!! Function Docstrings???? (I lost marks for this last time so just in case)
+ * [DONE] !! Remove all commented out code
+ * [DECLINE] !! Optimize (If Possible) TODO: JUSTIFICATION: cant fucking read ur code
+ * [DEFERRED] !! Fix Min/Max silent error handling and tell user to re-input in this file
+ * [DECLINE] !! Make timer into 5:00 instead of 300s TODO: JUSTIFICATION: Unnecessary
+ * [DECLINE] ! Colored icons TODO: JUSTIFICATION: Unnecessary + watch us get docked marks for using stuff we didnt learn
+ * [DECLINE] ! Make it prettier TODO: JUSTIFICATION: what
  */
 
 public class GameControl {
 	static Scanner reader = new Scanner(System.in);
-
+	
+	/**
+	 * Prompts user for an integer value, and conducts Input Validation/Exception Handling.
+	 */
 	private static int check() {
 		String preInt = reader.nextLine();
 		try {
 			return Integer.parseInt(preInt);
 		} catch (NumberFormatException e) {
-			System.out.println("Please enter a valid integer");
+			System.err.println("Please enter a valid integer");
 		}
 		return check();
 	}
-
+	
+	/**
+	 * Game is run off this main code.
+	 * Calls relevant methods from initialized board & player class (through board) to make the game function.
+	 */
 	public static void main(String[] args) {
 		boolean alive = true;
-		// TODO Auto-generated method stub
+
 		System.out.println("" + "▄▄▄▄▄▄▄▄▄  ▄▄▄ . ▄▄▄· .▄▄ · ▄• ▄▌▄▄▄  ▄▄▄▀.   .▄▄▄  ▄• ▄▌▄▄▄ ..▄▄· ▄▄▄▄▄\n"
 				+ " •██  ▀▄ █·▀▄.▀·▐█ ▀█ ▐█ ▀. █▪██▌▀▄ █·▀▄.·    ▐▀•▀█ █▪██▌▀▄.▀·▐█ ▀. •██  \n"
 				+ "  ▐█.▪▐▀▀▄ ▐▀▀▪▄▄█▀▀█ ▄▀▀▀█▄█▌▐█▌▐▀▀▄ ▐▀▀▪    █▌·.█▌█▌▐█▌▐▀▀▪▄▄▀▀▀█▄ ▐█.▪\n"
@@ -106,10 +118,7 @@ public class GameControl {
 				System.out.println("Rewards Cleared! You Win!");
 				alive = false;
 			}
-			/*
-			 * if (board.plr.getLives() <= 0) { System.out.println(board.display());
-			 * System.err.println("You ran out of lives!"); alive = false; }
-			 */
+
 		}
 
 		out.println(board.display());
