@@ -19,6 +19,7 @@ import java.io.IOException;
  * [DONE?] !!! Input checking for EVERY input TODO: Raymond - Check
  * [DONE] !!! Function Docstrings???? (I lost marks for this last time so just in case)
  * [DONE] !! Remove all commented out code
+ * !! Play the game!!!!!!!! (make sure EVERYTHING is functional)
  * [DECLINE] !! Optimize (If Possible) TODO: JUSTIFICATION: cant fucking read ur code
  * [DEFERRED] !! Fix Min/Max silent error handling and tell user to re-input in this file
  * [DECLINE] !! Make timer into 5:00 instead of 300s TODO: JUSTIFICATION: Unnecessary
