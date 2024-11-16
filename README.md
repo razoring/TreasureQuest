@@ -1,5 +1,4 @@
 # TreasureQuest
-// INSTRUCTIONS:
 * WASD to navigate
 - Deactivated mines are persistent depicted as '*'
 - Treasures are persistent depicted as '$'
