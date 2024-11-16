@@ -33,9 +33,9 @@ public class GameControl {
 	/**
 	 * Prompts user for an integer value, and conducts Input Validation/Exception Handling.
 	 */
-	private static int check() {
-		String preInt = reader.nextLine();
-		try {
+	private static int check() { 
+		String preInt = reader.nextLine(); //prompt
+		try { //try/catch if input isnt not an integer
 			return Integer.parseInt(preInt);
 		} catch (NumberFormatException e) {
 			System.err.println("Please enter a valid integer");
@@ -48,7 +48,7 @@ public class GameControl {
 	 * Calls relevant methods from initialized board & player class (through board) to make the game function.
 	 */
 	public static void main(String[] args) {
-		boolean alive = true;
+		boolean alive = true; //whether not game is still going
 
 		System.out.println("" + "▄▄▄▄▄▄▄▄▄  ▄▄▄ . ▄▄▄· .▄▄ · ▄• ▄▌▄▄▄  ▄▄▄▀.   .▄▄▄  ▄• ▄▌▄▄▄ ..▄▄· ▄▄▄▄▄\n"
 				+ " •██  ▀▄ █·▀▄.▀·▐█ ▀█ ▐█ ▀. █▪██▌▀▄ █·▀▄.·    ▐▀•▀█ █▪██▌▀▄.▀·▐█ ▀. •██  \n"
@@ -64,7 +64,7 @@ public class GameControl {
 				+ "- Lives can be used to replenish points \n" + "- Treasure gives 50 points \n"
 				+ "- Power-ups give 20 points and an extra life \n" + "- Extra lives depending on difficulty \n");
 
-		try {
+		try { //try/catch for displaying scores
 			String scores = "// SCORES:\n";
 			File score = new File("highscores.txt");
 			score.createNewFile();
@@ -75,32 +75,33 @@ public class GameControl {
 				scores = scores + data + "\n";
 			}
 			scoreReader.close();
-			out.println(scores);
+			out.println(scores); //display previous scores
 		} catch (IOException e) {
 			System.err.println("An error occurred.");
 			e.printStackTrace();
 		}
 
-		System.out.println(
+		System.out.println( //prompt for map size
 				"// TO BEGIN:\n" + "Enter an integer to represent the map size (E.g: 5 = 5x5) \n" + "(Minimum of 5x5)");
 		Board board = new Board(Math.max(check(), 5)); // auto 3 or best size
-		System.out.println("// SELECT DIFFICULTY:\n"
+		//prompt for difficulity lvl (0-15)
+		System.out.println("// SELECT DIFFICULTY:\n" 
 				+ "Enter an integer to represent difficulty multiplier (E.g: 0 = Easy) \n" + "(Maximum of 15)");
 
 		board.gen(Math.min(check(), 15)); // auto or best setting
-		while (alive) {
-			System.out.println(board.display());
-			System.out.println("Enter your next movement (WASD):");
+		while (alive) { //while game is ongoing
+			System.out.println(board.display()); //display board
+			System.out.println("Enter your next movement (WASD):"); //prompt for movement
 			String input = reader.nextLine();
-			if (board.timeElapsed>=1) {
-				board.processMove(input);
+			if (board.timeElapsed>=1) { //if there is still time
+				board.processMove(input); //process movement
 			} else {
-				System.err.println("You ran out of time");
-				alive = false;
+				System.err.println("You ran out of time"); //no time remaining
+				alive = false; //game end
 			}
 
-			if (board.plr.getLives() <= 0 || board.plr.getPoints() <= 0) {
-				System.out.println(board.display());
+			if (board.plr.getLives() <= 0 || board.plr.getPoints() <= 0) { //check for lose conditions
+				System.out.println(board.display()); //display final board
 				System.err.println("You died!");
 
 				if (board.plr.getPoints() >= 20 && board.plr.getLives() <= 0) { // transform points to lives to move
@@ -113,18 +114,18 @@ public class GameControl {
 					board.plr.updateStat("Lives", -1);
 					board.plr.updateStat("Points", board.size * board.size);
 				} else {
-					alive = false;
+					alive = false; //game end
 				}
-			} else if (board.benefitCount <= 0 && board.plr.getLives() >= 1) {
+			} else if (board.benefitCount <= 0 && board.plr.getLives() >= 1) { //check for victory condition
 				System.out.println("Rewards Cleared! You Win!");
-				alive = false;
+				alive = false; //game end
 			}
 
 		}
 
-		out.println(board.display());
+		out.println(board.display()); //display final board
 		System.out.println("Game over!");
-		try {
+		try { //try/catch to prompt for highscores
 			String curFile = "";
 			File score = new File("highscores.txt");
 			score.createNewFile();
@@ -136,14 +137,15 @@ public class GameControl {
 			}
 			reader.close();
 
-			out.println("Enter your name to save score:");
+			out.println("Enter your name to save score:"); //prompt for name
 			Scanner name = new Scanner(System.in);
 
 			FileWriter myWriter = new FileWriter("highscores.txt");
+			//add score to file
 			myWriter.write(name.nextLine() + ": " + (board.plr.getPoints() + board.plr.getLives() * 20)
 					+ " (Difficulty:" + board.difficulty + " Elapsed:"
 					+ ((int) ((System.currentTimeMillis() - board.timeElapsed) / 100)) + "s)\n" + curFile);
-			myWriter.close();
+			myWriter.close(); //close to prevent dataleaks
 		} catch (IOException e) {
 			System.err.println("An error occurred.");
 			e.printStackTrace();
