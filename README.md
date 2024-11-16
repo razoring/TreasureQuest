@@ -3,7 +3,8 @@ Console game made in Java
 // INSTRUCTIONS:
 * WASD to navigate
 - Deactivated mines are persistent depicted as '*'
-- Treasures are persistent depicted as '$' \n" + "- Power-ups are not persistent and are depicted as 'P'
+- Treasures are persistent depicted as '$'
+- Power-ups are not persistent and are depicted as 'P'
 - Time limit of 5 minutes
 - Win by collecting all the rewards
 - Death upon zero lives/points
