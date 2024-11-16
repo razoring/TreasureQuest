@@ -1,5 +1,4 @@
 # TreasureQuest
-Console game made in Java
 // INSTRUCTIONS:
 * WASD to navigate
 - Deactivated mines are persistent depicted as '*'
