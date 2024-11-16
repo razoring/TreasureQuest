@@ -33,14 +33,23 @@ public class GameControl {
 	/**
 	 * Prompts user for an integer value, and conducts Input Validation/Exception Handling.
 	 */
-	private static int check() { 
+	private static int checkLetter() { 
 		String preInt = reader.nextLine(); //prompt
 		try { //try/catch if input isnt not an integer
 			return Integer.parseInt(preInt);
 		} catch (NumberFormatException e) {
 			System.err.println("Please enter a valid integer");
 		}
-		return check();
+		return checkLetter();
+	}
+	
+	private static int checkInt(int first,int min,int max) {
+		if (first>=min&&first<=max) {
+			return first;
+		} else {
+			System.err.println("Please enter a valid integer");
+			return checkInt(checkLetter(),min,max);
+		}
 	}
 	
 	/**
@@ -57,7 +66,7 @@ public class GameControl {
 				+ "  ▀▀▀ .▀  ▀ ▀▀▀  ▀  ▀  ▀▀▀▀  ▀▀▀ .▀  ▀ ▀▀▀     ·▀▀█.  ▀▀▀  ▀▀▀  ▀▀▀▀  ▀▀▀ ");
 		System.out.println("// INSTRUCTIONS:\n" + "* WASD to navigate \n"
 				+ "- Deactivated mines are persistent depicted as '*' \n"
-				+ "- Treasures are persistent depicted as '$' \n" + "- Power-ups are depicted as 'P' \n"
+				+ "- Treasures are persistent depicted as '$' \n" + "- Power-ups are not persistent and are depicted as 'P' \n"
 				+ "- Time limit of 5 minutes \n" + "- Win by collecting all the rewards \n"
 				+ "- Death upon zero lives/points \n" + "- Points are required to move \n"
 				+ "- Points are used to purchase lives \n" + "- Lives are used to resurrect \n"
@@ -83,17 +92,18 @@ public class GameControl {
 
 		System.out.println( //prompt for map size
 				"// TO BEGIN:\n" + "Enter an integer to represent the map size (E.g: 5 = 5x5) \n" + "(Minimum of 5x5)");
-		Board board = new Board(Math.max(check(), 5)); // auto 3 or best size
+		Board board = new Board(checkInt(checkLetter(),5,Integer.MAX_VALUE)); // auto or best size
 		//prompt for difficulity lvl (0-15)
 		System.out.println("// SELECT DIFFICULTY:\n" 
 				+ "Enter an integer to represent difficulty multiplier (E.g: 0 = Easy) \n" + "(Maximum of 15)");
 
-		board.gen(Math.min(check(), 15)); // auto or best setting
+		board.gen(checkInt(checkLetter(),0,15)); // auto or best setting
 		while (alive) { //while game is ongoing
 			System.out.println(board.display()); //display board
 			System.out.println("Enter your next movement (WASD):"); //prompt for movement
 			String input = reader.nextLine();
-			if (board.timeElapsed>=1) { //if there is still time
+			if (300-(int)((System.currentTimeMillis()-board.timeElapsed)/100)>=1) { //if there is still time
+				out.println(300-(int)((System.currentTimeMillis()-board.timeElapsed)/100));
 				board.processMove(input); //process movement
 			} else {
 				System.err.println("You ran out of time"); //no time remaining
@@ -123,7 +133,7 @@ public class GameControl {
 
 		}
 
-		out.println(board.display()); //display final board
+		out.println("Remaining Board:\n"+board.display()); //display final board
 		System.out.println("Game over!");
 		try { //try/catch to prompt for highscores
 			String curFile = "";

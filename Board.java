@@ -28,14 +28,12 @@ public class Board {
 	// generation logic
 	private double mineMax = 6; // difficulty increases
 	private double benefitMax = 8; // difficulty decreases
-	private boolean prizeMin = false; // minimum treasure requirement
-	private boolean powerMin = false; //minimum power
 	public int mineCount = 0; 
 	public int benefitCount = 0;
 	ArrayList<String> icons;
 
-	// icons directory; usage: icon.get("Player") --> "+"
-	public static HashMap<String, String> icon = new HashMap<String,String>(){{ // initialize STATIC hash map for easier referencing of icons
+	// icons directory; usage: ICON.get("Player") --> "+"
+	public static HashMap<String, String> ICON = new HashMap<String,String>(){{ // initialize STATIC hash map for easier referencing of icons
 		put("empty"," ");
 		put("prize","$");
 		put("power","P");
@@ -66,6 +64,9 @@ public class Board {
 	 * @param d Difficulty level on a scale of 0-15, 0 being easiest and 15 being hardest.
 	 */
 	public void gen(int d) {
+		boolean prizeMin = false; // minimum treasure requirement
+		boolean powerMin = false; //minimum power
+		
 		// generate rng table
 		this.difficulty = d; //set difficulty to appropriate value
 		d = difficulty+Math.floorDiv(d,2); //turns difficulty value into incremental factor for affected special tiles
@@ -90,52 +91,61 @@ public class Board {
 				int rand = (int)(Math.random()*icons.size());
 				
 				if (x == pos[0] && y == pos[1]) {
-					render(pos[0],pos[1],icon.get("plr")); //set player spawn
-					update(pos[0],pos[1],icon.get("plr")); //set player spawn
+					render(pos[0],pos[1],ICON.get("plr")); //set player spawn
+					update(pos[0],pos[1],ICON.get("plr")); //set player spawn
 					if (debug) { //if debug mode is enabled
 						out.println("spawn");
 						out.println(pos[1]);
 						out.println(pos[0]);
 					}
 				} else {
-					if (icon.get(icons.get(rand)) == "TBD") {
-						benefitCount++; //increase # of treasures on board
-						if (!prizeMin) {
-							update(x,y,icon.get("prize"));
-							prizeMin = true;
-						} else if (!powerMin) {
-							update(x,y,icon.get("power"));
-							powerMin = true;
-						} else { // if there is more opportunity, generate randomly benefits
-							update(x,y,icon.get(benefits[(int)(Math.random()*benefits.length)]));
-						}
-					} else { // gurantee treasure
-						if (!prizeMin) {
-							benefitCount++;
-							update(x,y,icon.get("prize"));
-							prizeMin = true;
-						} else if (!powerMin) {
-							benefitCount++;
-							update(x,y,icon.get("power"));
-							powerMin = true;
-						} else {
-							update(x,y,icon.get(icons.get(rand)));
-							if (icon.get(icons.get(rand))==icon.get("mine")) {
-								mineCount++;
-								if (debug) {
-									out.println(icon.get(icons.get(rand)));
-									out.println(x);
-									out.println(y);
-								}
-							}
-						}
+					if (ICON.get(icons.get(rand)).equals("TBD")) {
+					    benefitCount++; // Increase the number of treasures on the board
+
+					    // prioritize prize and power guarantees
+					    if (!prizeMin || !powerMin) {
+					        if (!prizeMin) {
+					            update(x, y, ICON.get("prize"));
+					            prizeMin = true;
+					        } else {
+					            update(x, y, ICON.get("power"));
+					            powerMin = true;
+					        }
+					    } else { 
+					        // if both are guaranteed, generate a random benefit
+					        update(x, y, ICON.get(benefits[(int) (Math.random() * benefits.length)]));
+					    }
+					} else { 
+					    // handle other cases including mines
+					    String icon = ICON.get(icons.get(rand));
+					    update(x, y, icon);
+
+					    if (icon.equals(ICON.get("mine"))) {
+					        mineCount++;
+					        if (debug) {
+					            out.println(icon);
+					            out.println(x);
+					            out.println(y);
+					        }
+					    } else if (!prizeMin || !powerMin) {
+					        // guarantee prize or power if not yet generated
+					        benefitCount++;
+					        if (!prizeMin) {
+					            update(x, y, ICON.get("prize"));
+					            prizeMin = true;
+					        } else {
+					            update(x, y, ICON.get("power"));
+					            powerMin = true;
+					        }
+					    }
 					}
-					render(x,y,icon.get("empty")); //fills grid with empty squares
+
+					render(x,y,ICON.get("empty")); //fills grid with empty squares
 				}
 			}
 		}
 		if (!debug) {
-			update(pos[0],pos[1],icon.get("empty")); // cast plr to empty
+			update(pos[0],pos[1],ICON.get("empty")); // cast plr to empty
 		}
 	}
 
@@ -185,7 +195,7 @@ public class Board {
 	 * Updates the hidden map containing special tile positions.
 	 * @param x horizontal position of tile
 	 * @param y vertical position of tile
-	 * @param value icon to be updated to
+	 * @param value ICON to be updated to
 	 */
 	private void update(int x, int y, String value) {
 		map[y][x] = value;
@@ -195,7 +205,7 @@ public class Board {
 	 * Updates the initial hidden tile map.
 	 * @param x horizontal position of tile
 	 * @param y vertical position of tile
-	 * @param value icon to be updated to
+	 * @param value ICON to be updated to
 	 */
 	private void set(int x, int y, String value) {
 		disarmed[y][x] = value;
@@ -205,7 +215,7 @@ public class Board {
 	 * Updates the visible tile map.
 	 * @param x horizontal position of tile
 	 * @param y vertical position of tile
-	 * @param value icon to be updated to
+	 * @param value ICON to be updated to
 	 */
 	private void render(int x, int y, String value) {
 		grid[y][x] = value;
@@ -247,39 +257,42 @@ public class Board {
 				System.err.println("Please enter a valid movement key! (WASD)"); //if invalid input
 			}
 			
-			// icon setter
+			// ICON setter
 			plr.updateStat("Points", -1); //decrement points on movement
-			render(lastX,lastY,icon.get("empty")); //set previous tile to 'empty'
+			render(lastX,lastY,ICON.get("empty")); //set previous tile to 'empty'
 			// fetch disarmed
 			for (int x = 0;x<size;x++) {
 				for (int y = 0;y<size;y++) {
-					if (disarmed[y][x]==icon.get("mine")) {
-						render(x,y,icon.get("mine")); 
+					if (disarmed[y][x]==ICON.get("mine")) {
+						render(x,y,ICON.get("mine")); 
+					} else if (disarmed[y][x]==ICON.get("prize")) {
+						render(x,y,ICON.get("prize")); 
 					}
 				}
 			}
-			render(pos[0],pos[1],icon.get("plr")); //set current tile to player
+			render(pos[0],pos[1],ICON.get("plr")); //set current tile to player
 			
-			if (map[pos[1]][pos[0]] != icon.get("empty")) { // if current cell is not empty
+			if (map[pos[1]][pos[0]] != ICON.get("empty")) { // if current cell is not empty
 				render(pos[0],pos[1],map[pos[1]][pos[0]]); // render current item
-				if (map[pos[1]][pos[0]] == icon.get("mine")) {
+				if (map[pos[1]][pos[0]] == ICON.get("mine")) {
 					//mine function
 					mineCount--;
-					set(pos[0],pos[1],icon.get("mine"));
+					set(pos[0],pos[1],ICON.get("mine"));
 					System.err.println("You stepped on a mine!");
 					plr.updateStat("Lives", -1); //decrement lives
-				} else if (map[pos[1]][pos[0]] == icon.get("prize")) {
+				} else if (map[pos[1]][pos[0]] == ICON.get("prize")) {
 					//treasure function
 					benefitCount--;
+					set(pos[0],pos[1],ICON.get("prize"));
 					System.out.println("Treasure opened!");
 					plr.updateStat("Points", 50); //+50 points
-				} else if (map[pos[1]][pos[0]] == icon.get("power")) {
+				} else if (map[pos[1]][pos[0]] == ICON.get("power")) {
 					//powerup function
 					benefitCount--;
 					System.out.println("Extra life!"); 
 					plr.updateStat("Lives", 1); //+1 life
 				}
-				map[pos[1]][pos[0]] = icon.get("empty"); // clear item
+				map[pos[1]][pos[0]] = ICON.get("empty"); // clear item
 			}
 		}
 	}
