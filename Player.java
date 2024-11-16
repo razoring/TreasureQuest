@@ -40,16 +40,16 @@ public class Player {
 	 * Updates the player's stats given the stat name and incremental value. <p>
 	 * For example, to increase lives by one, you would use updateStat("Lives", 1) <p>
 	 * To decrease lives by one, you would use updateStat("Lives", -1). <p>
-	 * @param type Statistic to be updated
+	 * @param type Statistic to be updated (Lives, Points)
 	 * @param val Increment to update statistic by
 	 */
 	public void updateStat(String type, int val) {
 		switch(type) {
-			case "Lives":
-				lives += val;
+			case "Lives": 
+				lives += val; //update lives
 				break;
 			case "Points":
-				points += val;
+				points += val; //update points
 				break;
 		}
 	}

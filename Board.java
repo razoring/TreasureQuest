@@ -22,15 +22,15 @@ public class Board {
 	protected String grid[][]; // to render
 	protected String map[][]; // hidden item map
 	protected String disarmed[][]; // inital hidden item map
-	public double timeElapsed;
-	public int difficulty;
+	public double timeElapsed; // timer
+	public int difficulty; // difficulty level (0-15)
 	
 	// generation logic
 	private double mineMax = 6; // difficulty increases
 	private double benefitMax = 8; // difficulty decreases
 	private boolean prizeMin = false; // minimum treasure requirement
-	private boolean powerMin = false;
-	public int mineCount = 0;
+	private boolean powerMin = false; //minimum power
+	public int mineCount = 0; 
 	public int benefitCount = 0;
 	ArrayList<String> icons;
 
@@ -51,14 +51,14 @@ public class Board {
 	 */
 	public Board(int s) {
 		size = s;
-		pos[0] = ((int)(Math.random()*s));
-		pos[1] = ((int)(Math.random()*s));
-		map = new String[s][s];
-		disarmed = new String[s][s];
-		grid = new String[s][s];
+		pos[0] = ((int)(Math.random()*s)); //generate random coordinate for player spawn
+		pos[1] = ((int)(Math.random()*s)); //generate random coordinate for player spawn
+		map = new String[s][s]; //initialize map
+		disarmed = new String[s][s]; //initialize initial map
+		grid = new String[s][s]; //initialize grid
 		plr = new Player(debug?10:1,s*s); // init stats: lives, points
-		timeElapsed = System.currentTimeMillis();
-		difficulty = 0;
+		timeElapsed = System.currentTimeMillis(); //start the timer
+		difficulty = 0; //initialize difficulty lvl
 	}
 	
 	/**
@@ -67,39 +67,39 @@ public class Board {
 	 */
 	public void gen(int d) {
 		// generate rng table
-		this.difficulty = d;
-		d = difficulty+Math.floorDiv(d,2); 
+		this.difficulty = d; //set difficulty to appropriate value
+		d = difficulty+Math.floorDiv(d,2); //turns difficulty value into incremental factor for affected special tiles
 		icons = new ArrayList<String>();
-		mineMax = mineMax+d;
-		benefitMax = Math.max(benefitMax-d, 2); // make sure two are always present
+		mineMax = mineMax+d; //add mines based on incremental factor
+		benefitMax = Math.max(benefitMax-d, 2); //decrease total treasures based on incremental factor
 		plr.updateStat("Lives",Math.min(Math.floorDiv(d,size*2), size*2)); // give player more health depending on difficulty
 		
-		for (int i = 0;i<(int)(mineMax);i++) {
+		for (int i = 0;i<(int)(mineMax);i++) { //generate determined # of mines
 			icons.add("mine");
 		}
-		for (int i = 0;i<(int)(benefitMax);i++) {
+		for (int i = 0;i<(int)(benefitMax);i++) { //generate determined # of treasures
 			icons.add("%");
 		}
-		for (int i = 0;i<(int)((size*size)-(mineMax+benefitMax));i++) {
+		for (int i = 0;i<(int)((size*size)-(mineMax+benefitMax));i++) { //all other squares are empty
 			icons.add("empty");
 		}
 		
 		// generate hidden map
-		for (int x = 0; x < size; x++) {
-			for (int y = 0; y < size; y++) {
+		for (int x = 0; x < size; x++) { //for all x-values
+			for (int y = 0; y < size; y++) { //for all y-values
 				int rand = (int)(Math.random()*icons.size());
 				
 				if (x == pos[0] && y == pos[1]) {
-					render(pos[0],pos[1],icon.get("plr"));
-					update(pos[0],pos[1],icon.get("plr"));
-					if (debug) {
+					render(pos[0],pos[1],icon.get("plr")); //set player spawn
+					update(pos[0],pos[1],icon.get("plr")); //set player spawn
+					if (debug) { //if debug mode is enabled
 						out.println("spawn");
 						out.println(pos[1]);
 						out.println(pos[0]);
 					}
 				} else {
 					if (icon.get(icons.get(rand)) == "TBD") {
-						benefitCount++;
+						benefitCount++; //increase # of treasures on board
 						if (!prizeMin) {
 							update(x,y,icon.get("prize"));
 							prizeMin = true;
@@ -130,7 +130,7 @@ public class Board {
 							}
 						}
 					}
-					render(x,y,icon.get("empty"));
+					render(x,y,icon.get("empty")); //fills grid with empty squares
 				}
 			}
 		}
@@ -148,26 +148,26 @@ public class Board {
 		
 		String board = "\n";
 		
-		board = board+"Time Left: "+(300-(int)((System.currentTimeMillis()-timeElapsed)/100))+"s\n";
-		board = board+"Lives  Points\n";
-		board = board+plr.getLives();
+		board = board+"Time Left: "+(300-(int)((System.currentTimeMillis()-timeElapsed)/100))+"s\n"; //display time remaining
+		board = board+"Lives  Points\n"; //display header for # of lives and points
+		board = board+plr.getLives(); //display lives
 		for (int i = 0;i<"Lives  ".length()-(""+plr.getLives()).length();i++) {
 			board = board+" ";
 		}
-		board = board+plr.getPoints();
+		board = board+plr.getPoints(); //display points
 		for (int i = 0;i<"Points  ".length()-(""+plr.getLives()).length();i++) {
 			board = board+" ";
 		}
 		board = board+"\n";
 		
-		for (int row = 0;row<size+1;row++) {
+		for (int row = 0;row<size+1;row++) { //generate board structure using for-loops
 			for (int column = 0;column<size;column++) {
 				board = board+"+---";
 				if (column==size-1) {
 					board = board+"+\n";
 				}
 			}
-			if (row<size) {
+			if (row<size) { //start new row on last column
 				for (int column = 0;column<size;column++) {
 					board = board+"| "+(debug?map[row][column]:grid[row][column])+" ";
 					if (column==size-1) {
@@ -176,7 +176,7 @@ public class Board {
 				}
 			}
 		}
-		board = board+mineCount+" Mines Left\n"+benefitCount+" Rewards Left";
+		board = board+mineCount+" Mines Left\n"+benefitCount+" Rewards Left"; //display remaining special tiles
 		
 		return board;
 	}
@@ -217,48 +217,48 @@ public class Board {
 	 */
 	public void processMove(String keystroke) {
 		if (keystroke.length()>0) {
-			int lastX = pos[0];
-			int lastY = pos[1];
+			int lastX = pos[0]; //store last x coordinate
+			int lastY = pos[1]; //store last y coordinate
 			
 			int i = 0; // get keybind queue index
 			
 			// movement logic
 			if (keystroke.charAt(i)=='w'||keystroke.charAt(i)=='W') {
-				pos[1] = pos[1]>0?pos[1]-1:0;
+				pos[1] = pos[1]>0?pos[1]-1:0; //move player up 1 space if not facing the roof
 				if (pos[1]==lastY) {
 					return;
 				}
 			} else if (keystroke.charAt(i)=='s'||keystroke.charAt(i)=='S') {
-				pos[1] = pos[1]<size-1?pos[1]+1:size-1;
+				pos[1] = pos[1]<size-1?pos[1]+1:size-1; //move player down 1 space if not facing the floor
 				if (pos[1]==lastY) {
 					return;
 				}
 			} else if (keystroke.charAt(i)=='a'||keystroke.charAt(i)=='A') {
-				pos[0] = pos[0]>0?pos[0]-1:0;
+				pos[0] = pos[0]>0?pos[0]-1:0; //move player left 1 space if not facing left wall
 				if (pos[0]==lastX) {
 					return;
 				}
 			} else if (keystroke.charAt(i)=='d'||keystroke.charAt(i)=='D') {
-				pos[0] = pos[0]<size-1?pos[0]+1:size-1;
+				pos[0] = pos[0]<size-1?pos[0]+1:size-1; //move player right 1 space if not facing right wall
 				if (pos[0]==lastX) {
 					return;
 				}
 			} else {
-				System.err.println("Please enter a valid movement key! (WASD)");
+				System.err.println("Please enter a valid movement key! (WASD)"); //if invalid input
 			}
 			
 			// icon setter
-			plr.updateStat("Points", -1);
-			render(lastX,lastY,icon.get("empty"));
+			plr.updateStat("Points", -1); //decrement points on movement
+			render(lastX,lastY,icon.get("empty")); //set previous tile to 'empty'
 			// fetch disarmed
 			for (int x = 0;x<size;x++) {
 				for (int y = 0;y<size;y++) {
 					if (disarmed[y][x]==icon.get("mine")) {
-						render(x,y,icon.get("mine"));
+						render(x,y,icon.get("mine")); 
 					}
 				}
 			}
-			render(pos[0],pos[1],icon.get("plr"));
+			render(pos[0],pos[1],icon.get("plr")); //set current tile to player
 			
 			if (map[pos[1]][pos[0]] != icon.get("empty")) { // if current cell is not empty
 				render(pos[0],pos[1],map[pos[1]][pos[0]]); // render current item
@@ -267,17 +267,17 @@ public class Board {
 					mineCount--;
 					set(pos[0],pos[1],icon.get("mine"));
 					System.err.println("You stepped on a mine!");
-					plr.updateStat("Lives", -1);
+					plr.updateStat("Lives", -1); //decrement lives
 				} else if (map[pos[1]][pos[0]] == icon.get("prize")) {
 					//treasure function
 					benefitCount--;
 					System.out.println("Treasure opened!");
-					plr.updateStat("Points", 50);
+					plr.updateStat("Points", 50); //+50 points
 				} else if (map[pos[1]][pos[0]] == icon.get("power")) {
 					//powerup function
 					benefitCount--;
-					System.out.println("Extra life!");
-					plr.updateStat("Lives", 1);
+					System.out.println("Extra life!"); 
+					plr.updateStat("Lives", 1); //+1 life
 				}
 				map[pos[1]][pos[0]] = icon.get("empty"); // clear item
 			}
